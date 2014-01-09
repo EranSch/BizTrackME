@@ -4,7 +4,7 @@ package biztrackme.common;
  *
  * @author Eran
  */
-public abstract class Product {
+public class Product {
   
   // Static class variable for tracking the number of instantiated objects
   public static int numberOfProducts = 0;

@@ -13,7 +13,11 @@ public class BizTrackMEServer {
     
     CustomerStore c = new CustomerStore("customers.txt");
     c.addRecord("Eran Schoellhorn\n15907 NW 188th St\n(970) 325-3726");
-    System.out.print(c.toString());
+    System.out.print(c);
+    
+    ProductStore p = new ProductStore("products.txt");
+    p.addRecord("Sony TV\n30985230972\n999.98");
+    System.out.println(p);
     
   }
   
