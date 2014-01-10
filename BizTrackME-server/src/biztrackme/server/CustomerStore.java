@@ -74,6 +74,8 @@ public class CustomerStore extends DataStore {
       System.out.println("File not found");
     }
     
+    System.out.println("Customer data loaded! [" + records.size() + "]");
+    
   }
 
   @Override

@@ -82,6 +82,8 @@ public class ProductStore extends DataStore  {
       System.out.println("File not found");
     }
     
+    System.out.println("Product data loaded! [" + records.size() + "]");
+    
   }
 
   @Override

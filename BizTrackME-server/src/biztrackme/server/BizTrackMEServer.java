@@ -1,5 +1,7 @@
 package biztrackme.server;
 
+import java.io.IOException;
+
 /**
  *
  * @author Eran
@@ -11,14 +13,16 @@ public class BizTrackMEServer {
    */
   public static void main(String[] args) {
     
-    CustomerStore c = new CustomerStore("customers.txt");
-    c.addRecord("Eran Schoellhorn\n15907 NW 188th St\n(970) 325-3726");
-    System.out.print(c);
-    
+    CustomerStore c = new CustomerStore("customers.txt");   
     ProductStore p = new ProductStore("products.txt");
-    p.addRecord("Sony TV\n30985230972\n999.98");
-    System.out.println(p);
+    Router router = new Router(c, p);
     
-  }
-  
+    try {
+      Server s = new Server(12345);
+      router.route(s.server);
+    } catch (IOException ex) {
+      System.out.println(ex.getMessage());
+    }
+    
+  }   
 }
