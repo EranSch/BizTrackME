@@ -1,10 +1,12 @@
 package biztrackme.common;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Eran
  */
-public class Customer extends Person {
+public class Customer extends Person implements Serializable {
   
   String address;
   

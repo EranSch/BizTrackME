@@ -1,10 +1,12 @@
 package biztrackme.common;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Eran
  */
-public abstract class Person {
+public abstract class Person implements Serializable{
 
   String name;
   String phone;

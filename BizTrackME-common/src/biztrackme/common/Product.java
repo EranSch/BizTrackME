@@ -1,10 +1,12 @@
 package biztrackme.common;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Eran
  */
-public class Product {
+public class Product implements Serializable {
   
   // Static class variable for tracking the number of instantiated objects
   public static int numberOfProducts = 0;

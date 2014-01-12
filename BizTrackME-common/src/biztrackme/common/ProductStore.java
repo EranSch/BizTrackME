@@ -4,13 +4,14 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Eran
  */
-public class ProductStore extends DataStore  {
+public class ProductStore extends DataStore implements Serializable  {
   
   private ArrayList<Product> records = new ArrayList();
   
