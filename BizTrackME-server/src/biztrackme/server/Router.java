@@ -85,12 +85,15 @@ public class Router {
           case "ADD_CUST":
             //@TODO Add customer method
             break;
+          case "TERMINATE":
+            System.out.println("Client initiated kill.");
+            System.exit(0);
           default:
             out.writeUTF("MESSAGE NOT RECOGNIZED");
             break;
         }
         
-      }while(!req.equalsIgnoreCase("TERMINATE"));
+      }while(!req.equals("TERMINATE"));
 
     }    
   }
