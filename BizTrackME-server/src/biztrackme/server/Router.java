@@ -79,7 +79,7 @@ public class Router {
             out.writeObject(c);
             out.flush();
             break;
-          case "ADD_PRO":
+          case "ADD_PROD":
             // @TODO Add product method
             break;
           case "ADD_CUST":
