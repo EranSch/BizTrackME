@@ -72,11 +72,11 @@ public class Router {
         
         switch (req) {
           case "VIEW_PROD":
-            out.writeUTF(p.toString());
+            out.writeObject(p);
             out.flush();
             break;
           case "VIEW_CUST":
-            out.writeBytes(c.toString());
+            out.writeObject(c);
             out.flush();
             break;
           case "ADD_PRO":

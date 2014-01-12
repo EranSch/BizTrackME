@@ -1,6 +1,6 @@
 package biztrackme.client;
 
-import biztrackme.common.Product;
+import biztrackme.common.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +20,8 @@ public class BizTrackMEClient {
   private ObjectOutputStream out;
   private ObjectInputStream in;
   private Socket serverSocket;
+  private ProductStore p;
+  private CustomerStore c;
 
   /**
    * @param args the command line arguments
@@ -36,13 +38,12 @@ public class BizTrackMEClient {
       client.connect("localhost", 12345);
       client.establishStreams();
       
-      // wait for ACK
-      client.readString();
+      System.out.println( client.getP().getRecords().size() 
+        + " products received");
       
-      client.sendString("VIEW_PROD");
+      System.out.println( client.getC().getRecords().size() 
+        + " customers received");
       
-      System.out.println(client.readString());
-       
       client.sendString("TERMINATE");
       
       
@@ -92,18 +93,62 @@ public class BizTrackMEClient {
     return input;
   }
   
-  public ArrayList getProducts(){
-    this.sendString("VIEW_PROD");
+  /**
+   * Passes String parameter to server and expects the return of an Object.
+   * The return is indeed castable so be sure to know what to expect and
+   * cast the return accordingly.
+   * @param message
+   * @return Object
+   */
+  public Object getObject(String message){
+    this.sendString(message);
+    Object incoming = null;
     try {
-      ArrayList prods = (ArrayList) in.readObject();
-      return prods;
+      incoming = in.readObject();
     } catch (IOException ex) {
       System.err.println("IO Error\n"+ex.getMessage());
-      return null;
     } catch (ClassNotFoundException ex) {
       System.err.println("Unexpected object type.");
-      return null;
     }
+    return incoming;
+  }
+
+  /**
+   * Re-sync the server's data stores with the client's. Don't run this 
+   * before a socket as well as the streams have been established.
+   */
+  private void populateStores() {
+    
+    // Get products
+    try {
+      this.p = (ProductStore) this.getObject("VIEW_PROD");   
+    }catch(Exception ex){
+      System.err.println("Unexpected object type.");
+    }
+    
+    // Get customers
+    try {
+      this.c = (CustomerStore) this.getObject("VIEW_CUST"); 
+    }catch(Exception ex){
+      System.err.println("Unexpected object type.");
+    }
+    
+  }
+
+  /**
+   * Retrieve the products datastore
+   * @return ProductStore
+   */
+  public ProductStore getP() {
+    return p;
+  }
+
+  /**
+   * Retreive the customers datastore
+   * @return CustomerStore
+   */
+  public CustomerStore getC() {
+    return c;
   }
   
 }
