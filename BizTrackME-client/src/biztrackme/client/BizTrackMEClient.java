@@ -35,8 +35,11 @@ public class BizTrackMEClient {
     );
     
     try {
+      
+      // Initialize the connection and populate data stores
       client.connect("localhost", 12345);
-      client.establishStreams();
+      client.establishStreams();     
+      client.populateStores();
       
       System.out.println( client.getP().getRecords().size() 
         + " products received");
@@ -53,10 +56,21 @@ public class BizTrackMEClient {
 
   }
   
+  /**
+   * Connect to a server's socket using the provided host and port
+   * @param host
+   * @param port
+   * @throws IOException 
+   */
   public void connect( String host, int port ) throws IOException{
     serverSocket = new Socket(host, port);
   }
   
+  /**
+   * After connecting to a server, consider invoking this method to 
+   * assign I/O streams to instance variables.
+   * @throws IOException 
+   */
   public void establishStreams() throws IOException{
     
     // This streams data TO the client
@@ -72,6 +86,10 @@ public class BizTrackMEClient {
     
   }
   
+  /**
+   * Send a UTF encoded string to connected server.
+   * @param message 
+   */
   public void sendString(String message){
     try {
       out.writeUTF(message);
@@ -82,6 +100,10 @@ public class BizTrackMEClient {
     }
   }
   
+  /**
+   * Read a UTF encoded string from the connected server.
+   * @return 
+   */
   public String readString(){
     String input;
     try {
