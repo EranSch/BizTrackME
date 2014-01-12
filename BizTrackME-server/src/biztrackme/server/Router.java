@@ -61,8 +61,6 @@ public class Router {
       );
       out.flush();
       
-      out.writeUTF("ACK");
-      out.flush();
       
       String req;
       do{
