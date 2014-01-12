@@ -1,5 +1,7 @@
 package biztrackme.server;
 
+import biztrackme.common.ProductStore;
+import biztrackme.common.CustomerStore;
 import java.io.IOException;
 
 /**

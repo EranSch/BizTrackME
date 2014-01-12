@@ -1,11 +1,10 @@
-package biztrackme.server;
+package biztrackme.common;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import biztrackme.common.Customer;
 
 /**
  *

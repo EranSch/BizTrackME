@@ -1,4 +1,4 @@
-package biztrackme.server;
+package biztrackme.common;
 
 import java.util.ArrayList;
 
