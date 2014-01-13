@@ -31,6 +31,8 @@ public class CustomerStore extends DataStore implements Serializable {
    */
   public CustomerStore(String path) {
     
+    this.path = path;
+    
     // Fields for line reading logic
     String line;
     int lineNum = 1;
@@ -42,7 +44,7 @@ public class CustomerStore extends DataStore implements Serializable {
     
     try {
       
-      FileReader file = new FileReader(path);
+      FileReader file = new FileReader(this.path);
       BufferedReader reader = new BufferedReader(file);
 
       try {

@@ -1,21 +1,22 @@
 package biztrackme.client;
 
 import biztrackme.common.*;
-import java.io.BufferedReader;
+import java.awt.Color;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  *
  * @author Eran
  */
-public class BizTrackMEClient {
+public final class ClientController {
+  
+  String SERVER_HOSTNAME = "localhost";
+  int    SERVER_PORT     = 12345;
   
   private ObjectOutputStream out;
   private ObjectInputStream in;
@@ -23,36 +24,31 @@ public class BizTrackMEClient {
   private ProductStore p;
   private CustomerStore c;
 
-  /**
-   * @param args the command line arguments
-   */
-  public static void main(String[] args) {
-    
-    BizTrackMEClient client = new BizTrackMEClient();
-    
-    BufferedReader input = new BufferedReader(
-      new InputStreamReader(System.in)
-    );
-    
+  public ClientController() {
+        
     try {
       
       // Initialize the connection and populate data stores
-      client.connect("localhost", 12345);
-      client.establishStreams();     
-      client.populateStores();
+      this.connect(SERVER_HOSTNAME,SERVER_PORT);
+      this.establishStreams();     
+      this.populateStores();
       
-      System.out.println( client.getP().getRecords().size() 
+      System.out.println( this.getP().getRecords().size() 
         + " products received");
       
-      System.out.println( client.getC().getRecords().size() 
-        + " customers received");
-      
-      client.sendString("TERMINATE");
-      
+      System.out.println( this.getC().getRecords().size() 
+        + " customers received");      
       
     } catch (IOException ex) {
-      Logger.getLogger(BizTrackMEClient.class.getName()).log(Level.SEVERE, null, ex);
+      System.out.print("Error connecting to server!");
     }
+    
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        closeConnections();
+      }
+    });
 
   }
   
@@ -62,7 +58,7 @@ public class BizTrackMEClient {
    * @param port
    * @throws IOException 
    */
-  public void connect( String host, int port ) throws IOException{
+  public void connect(String host, int port) throws IOException{
     serverSocket = new Socket(host, port);
   }
   
@@ -139,7 +135,7 @@ public class BizTrackMEClient {
    * Re-sync the server's data stores with the client's. Don't run this 
    * before a socket as well as the streams have been established.
    */
-  private void populateStores() {
+  public void populateStores() {
     
     // Get products
     try {
@@ -154,7 +150,27 @@ public class BizTrackMEClient {
     }catch(Exception ex){
       System.err.println("Unexpected object type.");
     }
-    
+  }
+  
+  /**
+   * Attempts to disassemble all stream and and socket.
+   */
+  public void closeConnections(){
+    this.sendString("CLIENT_DISCONNECT");
+    try {
+      if (out != null) {
+        out.flush();
+        out.close();
+      }
+      if (in != null) {
+        in.close();
+      }
+      if (serverSocket != null) {
+        serverSocket.close(); 
+      }
+    } catch (IOException ex) {
+      System.err.println("Failed to close all streams\n" + ex.getMessage());
+    } 
   }
 
   /**
@@ -172,5 +188,70 @@ public class BizTrackMEClient {
   public CustomerStore getC() {
     return c;
   }
+
+
+  void addProduct(
+    JLabel prodStatus, 
+    JTextField prodName, 
+    JTextField prodSKU, 
+    JTextField prodPrice) {
+    
+    // Create object, then write to server
+    try{
+      Product prod = new Product(
+        prodName.getText(),
+        prodSKU.getText(),
+        Double.parseDouble(prodPrice.getText())
+      );
+      this.sendString("ADD_PROD");
+      out.writeObject(prod);
+      out.flush();
+      
+      this.p.getRecords().add(prod);
+      
+      prodStatus.setText("Product added!");
+      prodStatus.setForeground(Color.black);
+      
+    }catch(NumberFormatException ex){
+      System.err.println("Cannot parse given price");
+      prodStatus.setText("Error parsing price.");
+      prodStatus.setForeground(Color.red);
+    }catch(IOException ex){
+      System.err.println("IO Error!");
+      prodStatus.setText("Error connecting to server :(");
+      prodStatus.setForeground(Color.red);
+    }   
+  }
+
+  void addCustomer(
+    JLabel custStatus, 
+    JTextField custName, 
+    JTextField custAddress, 
+    JTextField custPhone) {
+
+    // Create object, then write to server
+    try {
+      Customer cust = new Customer(
+        custName.getText(),
+        custAddress.getText(),
+        custPhone.getText()
+      );
+      this.sendString("ADD_CUST");
+      out.writeObject(cust);
+      out.flush();
+
+      this.c.getRecords().add(cust);
+
+      custStatus.setText("Customer added!");
+      custStatus.setForeground(Color.black);
+
+    } catch (IOException ex) {
+      System.err.println("IO Error!");
+      custStatus.setText("Error connecting to server :(");
+      custStatus.setForeground(Color.red);
+    }
+  
+  }
+
   
 }

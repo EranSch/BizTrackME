@@ -13,3 +13,6 @@ SKU404
 Product Five
 SKU505
 55555.55
+Test
+123
+123.0
