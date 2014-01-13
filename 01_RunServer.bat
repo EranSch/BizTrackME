@@ -1,3 +1,4 @@
 @echo off
 TITLE BizTrackME Server
-java -jar BizTrackME-server\dist\BizTrackME-server.jar
+cd BizTrackME-server
+java -jar dist\BizTrackME-server.jar
