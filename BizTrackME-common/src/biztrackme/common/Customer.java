@@ -44,8 +44,8 @@ public class Customer extends Person implements Serializable {
     String nl = System.getProperty("line.separator");
     
     sb.append(this.name).append(nl);
-    sb.append(this.phone).append(nl);
     sb.append(this.address).append(nl);
+    sb.append(this.phone).append(nl);
     
     return sb.toString();
     
