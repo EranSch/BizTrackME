@@ -2,6 +2,4 @@ build
 build.xml
 manifest.mf
 nbproject
-/BizTrackME-common/dist/
-/BizTrackME-server/dist/
-/BizTrackME-client/dist/
+*/dist/
