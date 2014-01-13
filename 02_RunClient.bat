@@ -1,0 +1,1 @@
+java -jar BizTrackME-client\dist\BizTrackME-client.jar
