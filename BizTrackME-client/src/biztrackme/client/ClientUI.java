@@ -112,7 +112,7 @@ public class ClientUI extends javax.swing.JFrame {
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, welcomePaneLayout.createSequentialGroup()
         .addGap(26, 26, 26)
         .addGroup(welcomePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-          .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+          .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, Short.MAX_VALUE)
           .addComponent(jTextArea1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
           .addGroup(javax.swing.GroupLayout.Alignment.LEADING, welcomePaneLayout.createSequentialGroup()
             .addComponent(jLabel1)
@@ -191,10 +191,11 @@ public class ClientUI extends javax.swing.JFrame {
       addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(addProductLayout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(prodName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel4)
-          .addComponent(prodStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(prodStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(prodName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel4)))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(prodSKU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -317,6 +318,11 @@ public class ClientUI extends javax.swing.JFrame {
     menuAbout.setText("About");
 
     aboutBizTrackME.setText("About BizTrackME");
+    aboutBizTrackME.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutBizTrackMEActionPerformed(evt);
+      }
+    });
     menuAbout.add(aboutBizTrackME);
 
     menuBar.add(menuAbout);
@@ -357,6 +363,15 @@ public class ClientUI extends javax.swing.JFrame {
   private void menuRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRefreshActionPerformed
     System.exit(0);
   }//GEN-LAST:event_menuRefreshActionPerformed
+
+  private void aboutBizTrackMEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutBizTrackMEActionPerformed
+    JOptionPane.showMessageDialog(
+      this, 
+      "BizTrackME- Business software for the new millenium!\n" +
+      "Written by: Eran Schoellhorn\n" +
+      "IT351: Advanced Java Programming " + 
+      "Version: 1.0.1132014", "BizTrackME", 3);
+  }//GEN-LAST:event_aboutBizTrackMEActionPerformed
 
   /**
    * @param args the command line arguments
