@@ -18,6 +18,7 @@ public class Server {
   public Server(int listenPort){  
     try {
       server = new ServerSocket(listenPort);
+      System.out.println("Listening on port " + listenPort);
     } catch (IOException ex) {
       System.err.println("Failed to open socket\n" + ex.getMessage());
       server = null;

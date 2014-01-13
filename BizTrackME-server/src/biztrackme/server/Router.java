@@ -6,8 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +24,6 @@ public class Router {
   public Router(CustomerStore cust, ProductStore prod) {
     this.c = cust;
     this.p = prod;
-    System.out.println("Router Instantiated.");
   }
 
   /**
