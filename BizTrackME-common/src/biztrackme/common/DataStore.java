@@ -14,23 +14,26 @@ public abstract class DataStore implements DataTransactor {
   
   String path;
   
+  /**
+   * Generic method to write a single record to the Object's associated 
+   * text file. 
+   * @param record 
+   */
   public void writeRecord( String record ){
-
-        try {
-          File file = new File(this.path);
-          try (BufferedWriter output = 
-            new BufferedWriter(
-              new FileWriter(file, true)
-            )) {
-            output.write(record);
-            output.close();
-          }
-        } catch (FileNotFoundException ex) {
-          System.err.println("File not found!");
-        } catch (IOException ex) {
-          System.err.println("IO Error!");
-        }
-
+    try {
+      File file = new File(this.path);
+      try (BufferedWriter output
+        = new BufferedWriter(
+          new FileWriter(file, true)
+        )) {
+        output.write(record);
+        output.close();
       }
+    } catch (FileNotFoundException ex) {
+      System.err.println("File not found!");
+    } catch (IOException ex) {
+      System.err.println("IO Error!");
+    }
+  }
   
 }

@@ -2,12 +2,6 @@ package biztrackme.server;
 
 import biztrackme.common.ProductStore;
 import biztrackme.common.CustomerStore;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  *
@@ -15,11 +9,9 @@ import java.io.IOException;
  */
 public class BizTrackMEServer {
   
-  String CUSTOMER_DATA = "customers.txt";
-  String PRODUCT_DATA  = "products.txt";
-  
-  CustomerStore c;
-  ProductStore p;
+  String  CUSTOMER_DATA = "customers.txt",
+          PRODUCT_DATA  = "products.txt";
+  int     LISTEN_PORT   = 12345;
 
   /**
    * @param args the command line arguments
@@ -29,20 +21,23 @@ public class BizTrackMEServer {
     app.init();
   }   
 
+  /**
+   * Initializes the server. This includes establishing datastores, opening
+   * a server socket, and listening for any requests.
+   */
   private void init() {
     
-    c = new CustomerStore(CUSTOMER_DATA);
-    p = new ProductStore(PRODUCT_DATA);
+    // Load datastores
+    CustomerStore c = new CustomerStore(CUSTOMER_DATA);
+    ProductStore p = new ProductStore(PRODUCT_DATA);
 
+    // Instantiate the Router
     Router router = new Router(c, p);
-
-    try {
-      Server s = new Server(12345);
-      router.route(s.server);
-    } catch (IOException ex) {
-      System.out.println(ex.getMessage());
-    }
-
-
+    
+    // Open the socket
+    Server s = new Server(LISTEN_PORT);
+    
+    // Begin routing requests
+    router.route(s.server);
   }
 }

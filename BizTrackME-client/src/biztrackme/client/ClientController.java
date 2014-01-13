@@ -43,6 +43,10 @@ public final class ClientController {
       System.out.print("Error connecting to server!");
     }
     
+    /*
+     * This method registers a shutdown hook for the client. The intention is
+     * to dismantle the network connections gently.
+     */
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
@@ -182,14 +186,22 @@ public final class ClientController {
   }
 
   /**
-   * Retreive the customers datastore
+   * Retrieve the customers datastore
    * @return CustomerStore
    */
   public CustomerStore getC() {
     return c;
   }
 
-
+  /**
+   * Sends a new Product object back to the server and, assuming it is received,
+   * also adds the new object to the local datastore. This method also updates
+   * the relevant status JLabel to update the UI with confirmation or error.
+   * @param prodStatus
+   * @param prodName
+   * @param prodSKU
+   * @param prodPrice 
+   */
   void addProduct(
     JLabel prodStatus, 
     JTextField prodName, 
@@ -223,6 +235,15 @@ public final class ClientController {
     }   
   }
 
+  /**
+   * Sends a new Customer object back to the server and, assuming it is received,
+   * also adds the new object to the local datastore. This method also updates
+   * the relevant status JLabel to update the UI with confirmation or error.   
+   * @param custStatus
+   * @param custName
+   * @param custAddress
+   * @param custPhone 
+   */
   void addCustomer(
     JLabel custStatus, 
     JTextField custName, 

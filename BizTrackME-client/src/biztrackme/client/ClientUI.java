@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package biztrackme.client;
 
 import biztrackme.common.Customer;
@@ -454,6 +448,9 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JPanel welcomePane;
   // End of variables declaration//GEN-END:variables
 
+  /**
+   * Simple init method which initializes the controller for the UI
+   */
   public void init(){
     
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -467,6 +464,9 @@ public class ClientUI extends javax.swing.JFrame {
     
   }
   
+  /**
+   * Creates and applies model for Products table
+   */
   public void refreshProducts(){
     // Initialize table model
     prodModel = new DefaultTableModel();
@@ -477,6 +477,9 @@ public class ClientUI extends javax.swing.JFrame {
     prodTable.setModel(prodModel);
   }
   
+  /**
+   * Creates and applies model for Customers table
+   */
   public void refreshCustomers(){
     // Initialize customer model
     custModel = new DefaultTableModel();

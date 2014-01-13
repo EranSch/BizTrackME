@@ -9,15 +9,18 @@ import java.net.ServerSocket;
  */
 public class Server {
   
-  public final ServerSocket server;
+  public ServerSocket server;
 
   /**
-   * Instantiates a server on the requested port
-   * @param listenPort
-   * @throws IOException 
+   * Instantiates a server socket on the requested port
+   * @param listenPort 
    */
-  public Server(int listenPort) throws IOException {  
-    server = new ServerSocket(listenPort);
-  }
-  
+  public Server(int listenPort){  
+    try {
+      server = new ServerSocket(listenPort);
+    } catch (IOException ex) {
+      System.err.println("Failed to open socket\n" + ex.getMessage());
+      server = null;
+    }
+  } 
 }
