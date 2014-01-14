@@ -2,6 +2,8 @@ package biztrackme.server;
 
 import biztrackme.common.ProductStore;
 import biztrackme.common.CustomerStore;
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  *
@@ -31,13 +33,24 @@ public class BizTrackMEServer {
     CustomerStore c = new CustomerStore(CUSTOMER_DATA);
     ProductStore p = new ProductStore(PRODUCT_DATA);
 
-    // Instantiate the Router
-    Router router = new Router(c, p);
     
     // Open the socket
     Server s = new Server(LISTEN_PORT);
     
-    // Begin routing requests
-    router.route(s.server);
+    while(true){
+      
+      // Listen for connections
+      Socket connection = null;
+      try {
+        connection = s.server.accept();
+      } catch (IOException ex) {
+        System.err.println("Failed to establish connection\n" + ex.getMessage());
+      }
+
+      Thread client = new Thread(new Router(connection, c, p));
+
+      client.start();
+      
+    }
   }
 }

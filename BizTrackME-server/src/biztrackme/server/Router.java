@@ -4,47 +4,38 @@ import biztrackme.common.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
  *
  * @author Eran
  */
-public class Router {
+public class Router implements Runnable {
   
   private final CustomerStore c;
   private final ProductStore p;
+  private final Socket connection;
 
   /**
    * This is the preferred means of instantiating this class. 
+   * @param connection
    * @param cust CustomerStore
    * @param prod ProductStore 
    */
-  public Router(CustomerStore cust, ProductStore prod) {
+  public Router(Socket connection, CustomerStore cust, ProductStore prod) {
+    this.connection = connection;
     this.c = cust;
     this.p = prod;
-  }
-
-  /**
-   * Please, just don't use this Constructor!
-   */
-  public Router() {
-    this.c = null;
-    this.p = null;
   }
   
   /**
    * Handles the message passing and invocation of various methods based
    * on communication with the client.
-   * @param server 
    */
-  public void route( ServerSocket server ){   
+  @Override
+  public void run(){   
 
-    while(true){
       try {
-        // Listen for connections
-        Socket connection = server.accept();
         
         // Get hostname of client
         String clientName = connection.getInetAddress().getHostName();
@@ -111,8 +102,6 @@ public class Router {
       } catch (IOException ex) {
         System.err.println("Router IO Error!\n" + ex.getMessage());
       }
-
-    }    
   }
   
   /**
