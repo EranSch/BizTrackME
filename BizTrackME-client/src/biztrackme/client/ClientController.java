@@ -274,5 +274,30 @@ public final class ClientController {
   
   }
 
-  
+  public String search(String recordType, String query) {
+    
+    String result = "No record found";
+    
+    switch(recordType){
+      
+      case "cust":
+       for( Customer cust :  this.c.getRecords()){
+         if(cust.getName().toLowerCase().contains(query.toLowerCase())){
+           result = cust.toString();
+           break;
+         }
+       }
+      case "prod":
+        for( Product prod : this.p.getRecords()){
+          if(prod.getProductName().toLowerCase().contains(query.toLowerCase())){
+            result = prod.toString();
+            break;
+          }
+        }
+      
+    }
+    
+    return result; 
+    
+  }
 }
