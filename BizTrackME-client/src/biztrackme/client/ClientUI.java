@@ -421,7 +421,7 @@ public class ClientUI extends javax.swing.JFrame {
       "BizTrackME- Business software for the new millenium!\n" +
       "Written by: Eran Schoellhorn\n" +
       "IT351: Advanced Java Programming\n" + 
-      "Version: 1.0.1132014", "BizTrackME", 3);
+      "Version: 1.0.1142014", "BizTrackME", 3);
   }//GEN-LAST:event_aboutBizTrackMEActionPerformed
 
   private void custClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custClearActionPerformed
