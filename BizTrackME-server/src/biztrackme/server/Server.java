@@ -18,9 +18,9 @@ public class Server {
   public Server(int listenPort){  
     try {
       server = new ServerSocket(listenPort);
-      System.out.println("Listening on port " + listenPort);
+      BizTrackMEServer.logEvent("event", "Listening on port " + listenPort);
     } catch (IOException ex) {
-      System.err.println("Failed to open socket\n" + ex.getMessage());
+      BizTrackMEServer.logEvent("error", "Failed to open socket\n" + ex.getMessage());
       server = null;
     }
   } 

@@ -4,6 +4,8 @@ import biztrackme.common.ProductStore;
 import biztrackme.common.CustomerStore;
 import java.io.IOException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -44,7 +46,7 @@ public class BizTrackMEServer {
       try {
         connection = s.server.accept();
       } catch (IOException ex) {
-        System.err.println("Failed to establish connection\n" + ex.getMessage());
+        BizTrackMEServer.logEvent("error", "Failed to establish connection\n" + ex.getMessage());
       }
 
       Thread client = new Thread(new Router(connection, c, p));
@@ -53,4 +55,18 @@ public class BizTrackMEServer {
       
     }
   }
+  
+  public static void logEvent(String type, String message){
+    String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
+    switch(type){
+      case "error":
+        System.err.println(timeStamp + " X " + message);
+        break;
+      case "event":
+      default:
+        System.out.println(timeStamp + " | " + message);
+        break;
+    }
+  }
+  
 }

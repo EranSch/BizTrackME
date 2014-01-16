@@ -12,9 +12,13 @@ import java.net.Socket;
  */
 public class Router implements Runnable {
   
+  private static int threadCount;
+  
   private final CustomerStore c;
   private final ProductStore p;
   private final Socket connection;
+  
+  private final int threadID;
 
   /**
    * This is the preferred means of instantiating this class. 
@@ -26,6 +30,7 @@ public class Router implements Runnable {
     this.connection = connection;
     this.c = cust;
     this.p = prod;
+    this.threadID = threadCount++;
   }
   
   /**
@@ -38,10 +43,12 @@ public class Router implements Runnable {
       try {
         
         // Get hostname of client
-        String clientName = connection.getInetAddress().getHostName();
+        String clientName = connection.getInetAddress().getHostName()
+          + "[" + threadID + "]";
         
         // Announce connection
-        System.out.println( clientName + " connected.");
+        
+        BizTrackMEServer.logEvent("event", clientName + " connected.");
         
         // This streams data FROM the client
         ObjectInputStream in = new ObjectInputStream(
@@ -64,7 +71,7 @@ public class Router implements Runnable {
         do{
           
           req = in.readUTF();
-          System.out.println( clientName + ">>>" + req );
+          BizTrackMEServer.logEvent("event", clientName + " >>> " + req );
           
           switch (req) {
             case "VIEW_PROD":
@@ -79,19 +86,19 @@ public class Router implements Runnable {
               Product prod = (Product) this.readObject(in);
               p.getRecords().add(prod);
               p.writeRecord(prod.toString());
-              System.out.println(prod);
+              BizTrackMEServer.logEvent("event", prod.toString());
               break;
             case "ADD_CUST":
               Customer cust = (Customer) this.readObject(in);
               c.getRecords().add(cust);
               c.writeRecord(cust.toString());
-              System.out.println(cust);
+              BizTrackMEServer.logEvent("event", cust.toString());
               break;
             case "TERMINATE":
-              System.out.println("Client initiated kill.");
+              BizTrackMEServer.logEvent("event", "Client initiated kill.");
               System.exit(0);
             case "CLIENT_DISCONNECT":
-              System.out.println(clientName + " disconnected.");
+              BizTrackMEServer.logEvent("event", clientName + " disconnected.");
               break;
             default:
               out.writeUTF("MESSAGE NOT RECOGNIZED");
@@ -100,7 +107,7 @@ public class Router implements Runnable {
           
         }while(!req.equals("CLIENT_DISCONNECT"));
       } catch (IOException ex) {
-        System.err.println("Router IO Error!\n" + ex.getMessage());
+        BizTrackMEServer.logEvent("error", "Router IO Error!\n" + ex.getMessage());
       }
   }
   
@@ -114,9 +121,9 @@ public class Router implements Runnable {
     try {
       return in.readObject();
     } catch (IOException ex) {
-      System.err.println("IO Error!" + ex.getMessage());
+      BizTrackMEServer.logEvent("error", "IO Error!" + ex.getMessage());
     } catch (ClassNotFoundException ex) {
-      System.err.println("Class error!" + ex.getMessage());
+      BizTrackMEServer.logEvent("error", "Class error!" + ex.getMessage());
     }
     return null;
   }
