@@ -31,3 +31,21 @@ SKU8749
 Jack Knife
 SKU7489
 487.45
+Swilly Gig
+SKU73871
+200.0
+Tedious Companion
+SKU7589
+244.45
+Failed Drive
+SKU0002
+0.95
+Flawed Capacitor
+SKU7487
+0.5
+Flawed Microwave
+SKU7488
+55.6
+350GB Floppy
+SKU7584
+8000.0
