@@ -14,8 +14,7 @@ public class Router implements Runnable {
   
   private static int threadCount;
   
-  private final CustomerStore c;
-  private final ProductStore p;
+  private final MySQLAccess db;
   private final Socket connection;
   
   private final int threadID;
@@ -23,13 +22,11 @@ public class Router implements Runnable {
   /**
    * This is the preferred means of instantiating this class. 
    * @param connection
-   * @param cust CustomerStore
-   * @param prod ProductStore 
+   * @param db 
    */
-  public Router(Socket connection, CustomerStore cust, ProductStore prod) {
+  public Router(Socket connection, MySQLAccess db) {
     this.connection = connection;
-    this.c = cust;
-    this.p = prod;
+    this.db = db;
     this.threadID = threadCount++;
   }
   
@@ -75,27 +72,28 @@ public class Router implements Runnable {
           
           switch (req) {
             case "VIEW_PROD":
-              out.writeObject(p);
+              out.writeObject(db.getProducts());
               out.flush();
               break;
             case "VIEW_CUST":
-              out.writeObject(c);
+             out.writeObject(db.getCustomers());
               out.flush();
               break;
             case "ADD_PROD":
               Product prod = (Product) this.readObject(in);
-              p.getRecords().add(prod);
-              p.writeRecord(prod.toString());
+              //p.getRecords().add(prod);
+              //p.writeRecord(prod.toString());
               BizTrackMEServer.logEvent("event", prod.toString());
               break;
             case "ADD_CUST":
               Customer cust = (Customer) this.readObject(in);
-              c.getRecords().add(cust);
-              c.writeRecord(cust.toString());
+              //c.getRecords().add(cust);
+              //c.writeRecord(cust.toString());
               BizTrackMEServer.logEvent("event", cust.toString());
               break;
             case "TERMINATE":
               BizTrackMEServer.logEvent("event", "Client initiated kill.");
+              db.close();
               System.exit(0);
             case "CLIENT_DISCONNECT":
               BizTrackMEServer.logEvent("event", clientName + " disconnected.");
