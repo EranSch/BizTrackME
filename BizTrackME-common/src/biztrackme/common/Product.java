@@ -11,6 +11,7 @@ public class Product implements Serializable {
   // Static class variable for tracking the number of instantiated objects
   public static int numberOfProducts = 0;
   
+  int     ID;
   String  productName,
           sku,
           color;
@@ -24,15 +25,32 @@ public class Product implements Serializable {
    * @param price 
    * @param color 
    */
-  public Product(String productname, String sku, double price, String color) {
+  public Product(
+    String productname, 
+    String sku, 
+    double price, 
+    String color
+  ) {
+    this( 0, productname, sku, price, color );
+  }
+
+  public Product(
+    int ID, 
+    String productName, 
+    String sku, 
+    double price, 
+    String color
+  ) {
     
-    this.productName = productname;
+    this.ID = ID;
+    this.productName = productName;
     this.sku = sku;
     this.price = price;
     this.color = color;
     
     numberOfProducts++;
   }
+  
 
   /**
    * Override the no args constructor as well to ensure the class variable
@@ -96,6 +114,10 @@ public class Product implements Serializable {
 
   public void setColor(String color) {
     this.color = color;
+  }
+
+  public int getID() {
+    return ID;
   }
   
 }

@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 public class ProductTableModel extends AbstractTableModel {
 
   private ArrayList<String[]> data = new ArrayList();;
-  private final String[] columnHeading = { "Product Name", "SKU", "Price", "Color" };
+  private final String[] columnHeading = { "ID", "Product Name", "SKU", "Price", "Color" };
 
   public ProductTableModel(ArrayList<Product> products) {
     populateData(products);
@@ -49,6 +49,7 @@ public class ProductTableModel extends AbstractTableModel {
     data.clear();
     for(Product p : products){
       String[] insert = {
+        String.valueOf(p.getID()),
         p.getProductName(),
         p.getSku(),
         String.valueOf(p.getPrice()),

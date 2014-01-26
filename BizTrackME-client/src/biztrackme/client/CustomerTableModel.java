@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 public class CustomerTableModel extends AbstractTableModel {
 
   private final ArrayList<String[]> data = new ArrayList();
-  private final String[] columnHeading = { "First Name", "Last Name", "Address", "Phone" };
+  private final String[] columnHeading = { "ID", "First Name", "Last Name", "Address", "Phone" };
 
   public CustomerTableModel(ArrayList<Customer> customers) {
     populateData(customers);
@@ -43,10 +43,11 @@ public class CustomerTableModel extends AbstractTableModel {
   private void populateData(ArrayList<Customer> customers) {
     for(Customer c : customers){
       String[] obj = new String[columnHeading.length];
-      obj[0] = c.getFirstName();
-      obj[1] = c.getLastName();
-      obj[2] = c.getAddress();
-      obj[3] = c.getPhone();
+      obj[0] = String.valueOf(c.getID());
+      obj[1] = c.getFirstName();
+      obj[2] = c.getLastName();
+      obj[3] = c.getAddress();
+      obj[4] = c.getPhone();
       data.add(obj);
     }
   }

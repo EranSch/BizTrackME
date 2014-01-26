@@ -131,6 +131,7 @@ public class MySQLAccess {
 
       while (rs.next() == true) {
         products.add(new Product(
+          rs.getInt("product_id"),
           rs.getString("product_name"),
           rs.getString("sku"),
           rs.getDouble("price"),
@@ -159,6 +160,7 @@ public class MySQLAccess {
       
       while (rs.next() == true){
         customers.add(new Customer(
+          rs.getInt("customer_id"),
           rs.getString("first_name"),
           rs.getString("last_name"),
           rs.getString("address"),

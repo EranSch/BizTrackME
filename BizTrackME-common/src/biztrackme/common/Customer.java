@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author Eran
  */
 public class Customer extends Person implements Serializable {
-  
+  int ID;
   String address;
   
   /**
@@ -18,12 +18,29 @@ public class Customer extends Person implements Serializable {
    * @param address Customer's address
    */
 
-  public Customer(String firstName, String lastName, String address, String phone ) {
+  public Customer(
+    String firstName, 
+    String lastName, 
+    String address, 
+    String phone 
+  ) {
+    this(0, firstName, lastName, address, phone);
+  }
+  
+  public Customer(
+    int ID, 
+    String firstName, 
+    String lastName, 
+    String address, 
+    String phone 
+  ) {
+    this.ID = ID;
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
     this.address = address;
   }
+
 
   public String getAddress() {
     return address;
@@ -32,6 +49,11 @@ public class Customer extends Person implements Serializable {
   public void setAddress(String address) {
     this.address = address;
   }
+
+  public int getID() {
+    return ID;
+  }
+  
   
   /**
    * Reduce customer information into string data
