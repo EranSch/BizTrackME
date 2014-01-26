@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -56,19 +58,72 @@ public class MySQLAccess {
       rs = c.createStatement().executeQuery(query);
       return rs;
     } catch (SQLException ex) {
-      BizTrackMEServer.logEvent("error", "Query failed!");
+      BizTrackMEServer.logEvent("error", "Query failed!\n"+ex.getMessage());
       return null;
     }
   }
   
+  /**
+   * Preformats a basic INSERT query. Parameters B and C are String[]'s, 
+   * comprising of the fields and values to push into the DB
+   * @param table
+   * @param fields
+   * @param values 
+   */
+  public void insert( String table, String[] fields, String[] values ){
+    
+    String query = "INSERT INTO `" + table + "` "
+      + "(" + this.convertToCS(fields, "`") + ")"
+      + " VALUES "
+      + "(" + this.convertToCS(values, "'") + ")";
+    
+    BizTrackMEServer.logEvent("event", "Issuing Query [" + query + "]");
+    
+    try {
+      c.createStatement().execute(query);
+    } catch (SQLException ex) {
+      BizTrackMEServer.logEvent("error", "Query failed!\n"+ex.getMessage());
+    }
+  }
+  
+  /**
+   * Inserts a Customer object into the database
+   * @param c Customer 
+   */
   public void addCustomer(Customer c){
-    // TODO Add customer
+    this.insert(
+      "customers",
+      new String[]{"first_name", "last_name", "address", "phone"},
+      new String[]{
+        c.getFirstName(),
+        c.getLastName(),
+        c.getAddress(),
+        c.getPhone()
+      }
+    );
   }
   
+  /**
+   * Inserts a Product object into the database
+   * @param p Product
+   */
   public void addProduct(Product p){
-    // TODO Add product
+    this.insert(
+      "products", 
+      new String[]{"product_name","sku","price", "color"},
+      new String[]{ 
+        p.getProductName(), 
+        p.getSku(), 
+        String.valueOf(p.getPrice()), 
+        p.getColor()
+      } 
+    );
   }
   
+  /**
+   * Get an ArrayList containing all Product objects in the DB.
+   * @return ArrayList<Product>
+   */
   public ArrayList<Product> getProducts(){
     
     try {
@@ -93,6 +148,10 @@ public class MySQLAccess {
     
   }
   
+  /**
+   * Get an ArrayList containing all Customer objects in the DB.
+   * @return ArrayList<Customer>
+   */
   public ArrayList<Customer> getCustomers(){
     
     try {
@@ -112,9 +171,28 @@ public class MySQLAccess {
     } catch (SQLException ex) {
       BizTrackMEServer.logEvent("error", "Get customers failed.");
     }
-    
+        
     return null;
     
+  }
+
+  /**
+   * Simple method to convert a String[] into a single comma separated String.
+   * Parameter B is the character used to encapsulate each item. As in a single
+   * or double quotation.
+   * @param array String[] to parse
+   * @param sep Character to encapsulate each entry
+   * @return String Comma separated string.
+   */
+  private String convertToCS(String[] array, String sep) {
+    StringBuilder sb = new StringBuilder();
+    for (String n : array) {
+      if (sb.length() > 0) {
+        sb.append(',');
+      }
+      sb.append(sep).append(n).append(sep);
+    }
+    return sb.toString();
   }
   
   

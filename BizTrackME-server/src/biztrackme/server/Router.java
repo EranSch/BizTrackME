@@ -76,20 +76,16 @@ public class Router implements Runnable {
               out.flush();
               break;
             case "VIEW_CUST":
-             out.writeObject(db.getCustomers());
+              out.writeObject(db.getCustomers());
               out.flush();
               break;
             case "ADD_PROD":
-              Product prod = (Product) this.readObject(in);
-              //p.getRecords().add(prod);
-              //p.writeRecord(prod.toString());
-              BizTrackMEServer.logEvent("event", prod.toString());
+              db.addProduct((Product) this.readObject(in));
+              BizTrackMEServer.logEvent("event", "Product received");
               break;
             case "ADD_CUST":
-              Customer cust = (Customer) this.readObject(in);
-              //c.getRecords().add(cust);
-              //c.writeRecord(cust.toString());
-              BizTrackMEServer.logEvent("event", cust.toString());
+              db.addCustomer((Customer) this.readObject(in));
+              BizTrackMEServer.logEvent("event", "Product received");
               break;
             case "TERMINATE":
               BizTrackMEServer.logEvent("event", "Client initiated kill.");
