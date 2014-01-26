@@ -22,8 +22,6 @@ public final class ClientController {
   private ObjectOutputStream out;
   private ObjectInputStream in;
   private Socket serverSocket;
-  private ArrayList<Product> p;
-  private ArrayList<Customer> c;
 
   public ClientController() {
         
@@ -32,13 +30,7 @@ public final class ClientController {
       // Initialize the connection and populate data stores
       this.connect(SERVER_HOSTNAME,SERVER_PORT);
       this.establishStreams();     
-      this.populateStores();
-      
-      System.out.println( this.p.size() 
-        + " products received");
-      
-      System.out.println( this.c.size() 
-        + " customers received");      
+    
       
     } catch (IOException ex) {
       System.out.print("Error connecting to server!");
@@ -135,27 +127,6 @@ public final class ClientController {
     }
     return incoming;
   }
-
-  /**
-   * Re-sync the server's data stores with the client's. Don't run this 
-   * before a socket as well as the streams have been established.
-   */
-  public void populateStores() {
-    
-    // Get products
-    try {
-      this.p = (ArrayList<Product>) this.getObject("VIEW_PROD");
-    }catch(Exception ex){
-      System.err.println("Unexpected object type.");
-    }
-    
-    // Get customers
-    try {
-      this.c = (ArrayList<Customer>) this.getObject("VIEW_CUST"); 
-    }catch(Exception ex){
-      System.err.println("Unexpected object type.");
-    }
-  }
   
   /**
    * Attempts to disassemble all stream and and socket.
@@ -205,9 +176,7 @@ public final class ClientController {
       this.sendString("ADD_PROD");
       out.writeObject(prod);
       out.flush();
-      
-      this.p.add(prod);
-      
+            
       prodStatus.setText("Product added!");
       prodStatus.setForeground(Color.black);
       
@@ -250,8 +219,6 @@ public final class ClientController {
       out.writeObject(cust);
       out.flush();
 
-      this.c.add(cust);
-
       custStatus.setText("Customer added!");
       custStatus.setForeground(Color.black);
 
@@ -267,44 +234,23 @@ public final class ClientController {
     
     String result = "No record found";
     
-    switch(recordType){
-      
-      case "cust":
-       for( Customer cust :  this.c ){
-         if(cust.getFirstName().toLowerCase().contains(query.toLowerCase())){
-           result = cust.toString();
-           break;
-         }
-       }
-      case "prod":
-        for( Product prod : this.p ){
-          if(prod.getProductName().toLowerCase().contains(query.toLowerCase())){
-            result = prod.toString();
-            break;
-          }
-        }
-      
-    }
+    // Add new logic for this later
     
     return result; 
     
   }
-
-  public ArrayList<Product> getP() {
-    return p;
-  }
-
-  public ArrayList<Customer> getC() {
-    return c;
-  }
   
   public CustomerTableModel buildCustModel(){
-    CustomerTableModel ctm = new CustomerTableModel(this.c);
+    CustomerTableModel ctm = new CustomerTableModel(
+      (ArrayList<Customer>) this.getObject("VIEW_CUST")
+    );
     return ctm;
   }
   
   public ProductTableModel buildProdModel(){
-    ProductTableModel ptm = new ProductTableModel(this.p);
+    ProductTableModel ptm = new ProductTableModel(
+      (ArrayList<Product>) this.getObject("VIEW_PROD")
+    );
     return ptm;
   }
   

@@ -465,10 +465,15 @@ public class ClientUI extends javax.swing.JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void fileRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileRefreshActionPerformed
-    client.populateStores();
-    pTableModel = client.buildProdModel();
+    
+    // Update product table
+    prodTable.setModel(client.buildProdModel());
     pTableModel.fireTableDataChanged();
-    prodTable.repaint();
+    
+    // Update customer table
+    custTable.setModel(client.buildCustModel());
+    pTableModel.fireTableDataChanged();
+    
   }//GEN-LAST:event_fileRefreshActionPerformed
 
   private void prodSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prodSubmitActionPerformed
