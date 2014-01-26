@@ -1,7 +1,5 @@
 package biztrackme.server;
 
-import biztrackme.common.ProductStore;
-import biztrackme.common.CustomerStore;
 import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -13,8 +11,7 @@ import java.util.Calendar;
  */
 public class BizTrackMEServer {
   
-  String  CUSTOMER_DATA = "customers.txt",
-          PRODUCT_DATA  = "products.txt";
+  String  DB_URL        = "jdbc:mysql://localhost/it351db";
   int     LISTEN_PORT   = 12345;
 
   /**
@@ -24,6 +21,7 @@ public class BizTrackMEServer {
     BizTrackMEServer app = new BizTrackMEServer();
     app.init();
   }   
+  
 
   /**
    * Initializes the server. This includes establishing datastores, opening
@@ -31,33 +29,42 @@ public class BizTrackMEServer {
    */
   private void init() {
     
-    // Load datastores
-    CustomerStore c = new CustomerStore(CUSTOMER_DATA);
-    ProductStore p = new ProductStore(PRODUCT_DATA);
+    //Connect the Database
+    MySQLAccess db = new MySQLAccess(DB_URL, "ctuonline", "student");
 
-    
     // Open the socket
     Server s = new Server(LISTEN_PORT);
     
     while(true){
       
       // Listen for connections
-      Socket connection = null;
+      Socket socket = null;
       try {
-        connection = s.server.accept();
+        socket = s.server.accept();
       } catch (IOException ex) {
         BizTrackMEServer.logEvent("error", "Failed to establish connection\n" + ex.getMessage());
       }
 
-      Thread client = new Thread(new Router(connection, c, p));
+      Thread client = new Thread(new Router(socket, db));
 
       client.start();
-      
     }
+    
   }
   
+  /**
+   * Writes log entry to console with timestamp. Set type to either "error" or 
+   * "event" in order to also include visual indicator. 
+   * @param type
+   * @param message 
+   */
   public static void logEvent(String type, String message){
-    String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
+    
+    // Get the time
+    String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(
+      Calendar.getInstance().getTime());
+    
+    // Parse the parameters
     switch(type){
       case "error":
         System.err.println(timeStamp + " X " + message);
