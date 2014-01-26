@@ -31,6 +31,14 @@ public class CustomerTableModel extends AbstractTableModel {
   public Object getValueAt(int i, int i1) {
     return (data.get(i))[i1];
   }
+  
+  public boolean isCellEditable(int row, int col) {
+    return true;
+  }
+
+  public String getColumnName(int col) {
+    return columnHeading[col].toString();
+  }
 
   private void populateData(ArrayList<Customer> customers) {
     for(Customer c : customers){

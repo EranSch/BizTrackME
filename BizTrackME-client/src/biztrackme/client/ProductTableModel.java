@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class ProductTableModel extends AbstractTableModel {
 
-  private final ArrayList<String[]> data = new ArrayList();;
+  private ArrayList<String[]> data = new ArrayList();;
   private final String[] columnHeading = { "Product Name", "SKU", "Price", "Color" };
 
   public ProductTableModel(ArrayList<Product> products) {
@@ -31,8 +31,22 @@ public class ProductTableModel extends AbstractTableModel {
   public Object getValueAt(int i, int i1) {
     return (data.get(i))[i1];
   }
+  
+  public boolean isCellEditable(int row, int col) {
+    return true;
+  }
+  
+  public String getColumnName(int col) {
+    return columnHeading[col].toString();
+  }
+  
+  public void setValueAt(Object value, int row, int col) {
+    data.get(row)[col] = value.toString();
+    fireTableCellUpdated(row, col);
+  }
 
-  private void populateData(ArrayList<Product> products) {
+  public void populateData(ArrayList<Product> products) {
+    data.clear();
     for(Product p : products){
       String[] insert = {
         p.getProductName(),
