@@ -1,10 +1,7 @@
 package biztrackme.client;
 
-import biztrackme.common.Customer;
-import biztrackme.common.Product;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -12,9 +9,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ClientUI extends javax.swing.JFrame {
   
-  ClientController client;
-  DefaultTableModel prodModel = new DefaultTableModel();
-  DefaultTableModel custModel = new DefaultTableModel();;
+  ClientController client = new ClientController();
+  CustomerTableModel cTableModel = client.buildCustModel();
+  ProductTableModel pTableModel = client.buildProdModel();
 
   /**
    * Creates new form ClientUI
@@ -47,27 +44,32 @@ public class ClientUI extends javax.swing.JFrame {
     addProduct = new javax.swing.JPanel();
     prodName = new javax.swing.JTextField();
     prodSKU = new javax.swing.JTextField();
-    prodPrice = new javax.swing.JTextField();
+    prodColor = new javax.swing.JTextField();
     jLabel4 = new javax.swing.JLabel();
     jLabel5 = new javax.swing.JLabel();
     jLabel6 = new javax.swing.JLabel();
     prodSubmit = new javax.swing.JButton();
     prodStatus = new javax.swing.JLabel();
     prodClear = new javax.swing.JButton();
+    jLabel10 = new javax.swing.JLabel();
+    prodPrice = new javax.swing.JTextField();
     addCustomer = new javax.swing.JPanel();
     jLabel9 = new javax.swing.JLabel();
     jLabel7 = new javax.swing.JLabel();
     jLabel8 = new javax.swing.JLabel();
     custStatus = new javax.swing.JLabel();
     custAddress = new javax.swing.JTextField();
-    custName = new javax.swing.JTextField();
+    custFirstName = new javax.swing.JTextField();
     custPhone = new javax.swing.JTextField();
     custSubmit = new javax.swing.JButton();
     custClear = new javax.swing.JButton();
+    custLastNameLabel = new javax.swing.JLabel();
+    custLastName = new javax.swing.JTextField();
     menuBar = new javax.swing.JMenuBar();
     menuFile = new javax.swing.JMenu();
     searchCust = new javax.swing.JMenuItem();
     searchProd = new javax.swing.JMenuItem();
+    killServer = new javax.swing.JMenuItem();
     fileRefresh = new javax.swing.JMenuItem();
     menuRefresh = new javax.swing.JMenuItem();
     menuAbout = new javax.swing.JMenu();
@@ -135,17 +137,18 @@ public class ClientUI extends javax.swing.JFrame {
           .addComponent(jLabel3))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jTextArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(38, Short.MAX_VALUE))
+        .addContainerGap(49, Short.MAX_VALUE))
     );
 
     tabPane.addTab("Start Page", welcomePane);
 
-    prodTable.setModel(prodModel);
+    prodTable.setModel(pTableModel);
     prodTable.setEnabled(false);
     prodPane.setViewportView(prodTable);
 
     tabPane.addTab("Products", prodPane);
 
+    custTable.setModel(cTableModel);
     custTable.setEnabled(false);
     custPane.setViewportView(custTable);
 
@@ -157,7 +160,7 @@ public class ClientUI extends javax.swing.JFrame {
 
     jLabel5.setText("SKU");
 
-    jLabel6.setText("Price");
+    jLabel6.setText("Color");
 
     prodSubmit.setText("Add Product");
     prodSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -174,6 +177,8 @@ public class ClientUI extends javax.swing.JFrame {
         prodClearActionPerformed(evt);
       }
     });
+
+    jLabel10.setText("Price");
 
     javax.swing.GroupLayout addProductLayout = new javax.swing.GroupLayout(addProduct);
     addProduct.setLayout(addProductLayout);
@@ -194,16 +199,21 @@ public class ClientUI extends javax.swing.JFrame {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(prodSKU, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(prodPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))))
+              .addComponent(prodColor, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))))
         .addGap(18, 18, 18)
         .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(prodStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addProductLayout.createSequentialGroup()
-            .addGap(0, 7, Short.MAX_VALUE)
+            .addGap(0, 6, Short.MAX_VALUE)
             .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(prodClear, javax.swing.GroupLayout.Alignment.TRAILING)
               .addComponent(prodSubmit, javax.swing.GroupLayout.Alignment.TRAILING))))
         .addContainerGap())
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addProductLayout.createSequentialGroup()
+        .addComponent(jLabel10)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(prodPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(130, 130, 130))
     );
     addProductLayout.setVerticalGroup(
       addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,16 +232,20 @@ public class ClientUI extends javax.swing.JFrame {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(prodSubmit)
-          .addComponent(prodPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(prodColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel6))
-        .addContainerGap(13, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(prodPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(jLabel10))
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
     addCustomer.setBorder(javax.swing.BorderFactory.createTitledBorder("Add Customer"));
 
     jLabel9.setText("Phone");
 
-    jLabel7.setText("Name");
+    jLabel7.setText("First Name");
 
     jLabel8.setText("Address");
 
@@ -251,35 +265,41 @@ public class ClientUI extends javax.swing.JFrame {
       }
     });
 
+    custLastNameLabel.setText("Last Name");
+
     javax.swing.GroupLayout addCustomerLayout = new javax.swing.GroupLayout(addCustomer);
     addCustomer.setLayout(addCustomerLayout);
     addCustomerLayout.setHorizontalGroup(
       addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(addCustomerLayout.createSequentialGroup()
-        .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
           .addGroup(addCustomerLayout.createSequentialGroup()
-            .addGap(27, 27, 27)
-            .addComponent(jLabel7))
+            .addComponent(jLabel9)
+            .addGap(274, 274, 274))
           .addGroup(addCustomerLayout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jLabel8))
-          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addCustomerLayout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jLabel9)))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(addCustomerLayout.createSequentialGroup()
-            .addComponent(custName, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(custStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-          .addGroup(addCustomerLayout.createSequentialGroup()
-            .addComponent(custAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(custClear))
-          .addGroup(addCustomerLayout.createSequentialGroup()
-            .addComponent(custPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(custSubmit)))
+            .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addCustomerLayout.createSequentialGroup()
+                .addComponent(custLastNameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(custLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addComponent(custClear))
+              .addGroup(addCustomerLayout.createSequentialGroup()
+                .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                  .addComponent(jLabel7)
+                  .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addGroup(addCustomerLayout.createSequentialGroup()
+                    .addComponent(custFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(36, 36, 36)
+                    .addComponent(custStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                  .addComponent(custPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGroup(addCustomerLayout.createSequentialGroup()
+                    .addComponent(custAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(custSubmit)))))))
         .addContainerGap())
     );
     addCustomerLayout.setVerticalGroup(
@@ -290,21 +310,24 @@ public class ClientUI extends javax.swing.JFrame {
             .addGap(3, 3, 3)
             .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
               .addComponent(jLabel7)
-              .addComponent(custName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+              .addComponent(custFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
           .addComponent(custStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(custClear)
           .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-            .addComponent(custAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(jLabel8)))
+            .addComponent(custLastNameLabel)
+            .addComponent(custLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-            .addComponent(jLabel9)
-            .addComponent(custPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addComponent(custSubmit))
-        .addContainerGap(35, Short.MAX_VALUE))
+        .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(custSubmit)
+          .addComponent(custAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(jLabel8))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(addCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jLabel9)
+          .addComponent(custPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap())
     );
 
     javax.swing.GroupLayout addPaneLayout = new javax.swing.GroupLayout(addPane);
@@ -314,7 +337,7 @@ public class ClientUI extends javax.swing.JFrame {
       .addGroup(addPaneLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(addPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(addCustomer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(addCustomer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 350, Short.MAX_VALUE)
           .addComponent(addProduct, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
@@ -323,8 +346,8 @@ public class ClientUI extends javax.swing.JFrame {
       .addGroup(addPaneLayout.createSequentialGroup()
         .addContainerGap()
         .addComponent(addProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addGap(18, 18, 18)
-        .addComponent(addCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(addCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 146, Short.MAX_VALUE)
         .addContainerGap())
     );
 
@@ -347,6 +370,14 @@ public class ClientUI extends javax.swing.JFrame {
       }
     });
     menuFile.add(searchProd);
+
+    killServer.setText("Kill server");
+    killServer.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        killServerActionPerformed(evt);
+      }
+    });
+    menuFile.add(killServer);
 
     fileRefresh.setText("Refresh");
     fileRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -384,11 +415,11 @@ public class ClientUI extends javax.swing.JFrame {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+      .addComponent(tabPane)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
+      .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
     );
 
     pack();
@@ -397,18 +428,14 @@ public class ClientUI extends javax.swing.JFrame {
 
   private void fileRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileRefreshActionPerformed
     client.populateStores();
-    this.refreshCustomers();
-    this.refreshProducts();
   }//GEN-LAST:event_fileRefreshActionPerformed
 
   private void prodSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prodSubmitActionPerformed
-    client.addProduct( prodStatus, prodName, prodSKU, prodPrice );
-    this.refreshProducts();
+    client.addProduct( prodStatus, prodName, prodSKU, prodPrice, prodColor );
   }//GEN-LAST:event_prodSubmitActionPerformed
 
   private void custSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custSubmitActionPerformed
-    client.addCustomer(custStatus, custName, custAddress, custPhone);
-    this.refreshCustomers();
+    client.addCustomer(custStatus, custFirstName, custLastName, custAddress, custPhone);
   }//GEN-LAST:event_custSubmitActionPerformed
 
   private void menuRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRefreshActionPerformed
@@ -421,11 +448,11 @@ public class ClientUI extends javax.swing.JFrame {
       "BizTrackME- Business software for the new millenium!\n" +
       "Written by: Eran Schoellhorn\n" +
       "IT351: Advanced Java Programming\n" + 
-      "Version: 1.0.1142014", "BizTrackME", 3);
+      "Version: 2.0.1262014", "BizTrackME", 3);
   }//GEN-LAST:event_aboutBizTrackMEActionPerformed
 
   private void custClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custClearActionPerformed
-    custName.setText("");
+    custFirstName.setText("");
     custPhone.setText("");
     custAddress.setText("");
   }//GEN-LAST:event_custClearActionPerformed
@@ -433,7 +460,7 @@ public class ClientUI extends javax.swing.JFrame {
   private void prodClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prodClearActionPerformed
     prodName.setText("");
     prodSKU.setText("");
-    prodPrice.setText("");
+    prodColor.setText("");
   }//GEN-LAST:event_prodClearActionPerformed
 
   private void searchCustActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchCustActionPerformed
@@ -451,6 +478,17 @@ public class ClientUI extends javax.swing.JFrame {
     );
     JOptionPane.showMessageDialog(this, client.search("prod", query) );
   }//GEN-LAST:event_searchProdActionPerformed
+
+  private void killServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_killServerActionPerformed
+    if(JOptionPane.showConfirmDialog(this, 
+      "Warning, this will also exit the application\n"+
+      "Are you sure you want to kill the server?", 
+      "Kill server?", 
+      JOptionPane.YES_NO_CANCEL_OPTION) == 0){
+      client.sendString("TERMINATE");
+      System.exit(0);
+    }
+  }//GEN-LAST:event_killServerActionPerformed
 
   /**
    * @param args the command line arguments
@@ -497,10 +535,6 @@ public class ClientUI extends javax.swing.JFrame {
         }           
       }
     });
-    
-    
-    
-    
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -511,7 +545,9 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JLabel bizTrackLogo;
   private javax.swing.JTextField custAddress;
   private javax.swing.JButton custClear;
-  private javax.swing.JTextField custName;
+  private javax.swing.JTextField custFirstName;
+  private javax.swing.JTextField custLastName;
+  private javax.swing.JLabel custLastNameLabel;
   private javax.swing.JScrollPane custPane;
   private javax.swing.JTextField custPhone;
   private javax.swing.JLabel custStatus;
@@ -519,6 +555,7 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JTable custTable;
   private javax.swing.JMenuItem fileRefresh;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel10;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
   private javax.swing.JLabel jLabel5;
@@ -528,11 +565,13 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JLabel jLabel9;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JTextArea jTextArea1;
+  private javax.swing.JMenuItem killServer;
   private javax.swing.JMenu menuAbout;
   private javax.swing.JMenuBar menuBar;
   private javax.swing.JMenu menuFile;
   private javax.swing.JMenuItem menuRefresh;
   private javax.swing.JButton prodClear;
+  private javax.swing.JTextField prodColor;
   private javax.swing.JTextField prodName;
   private javax.swing.JScrollPane prodPane;
   private javax.swing.JTextField prodPrice;
@@ -553,39 +592,6 @@ public class ClientUI extends javax.swing.JFrame {
     
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
-    // Initialize client controller
-    client = new ClientController(); 
-    
-    // Populate tables
-    this.refreshProducts();
-    this.refreshCustomers();
-    
-  }
-  
-  /**
-   * Creates and applies model for Products table
-   */
-  public void refreshProducts(){
-    // Initialize table model
-    prodModel = new DefaultTableModel();
-    prodModel.setColumnIdentifiers(new String[]{"Name", "SKU", "Price"});
-    for (Product p : client.getP().getRecords()) {
-      prodModel.addRow(p.toString().split("\n"));
-    }
-    prodTable.setModel(prodModel);
-  }
-  
-  /**
-   * Creates and applies model for Customers table
-   */
-  public void refreshCustomers(){
-    // Initialize customer model
-    custModel = new DefaultTableModel();
-    custModel.setColumnIdentifiers(new String[]{"Name", "Address", "Phone"});
-    for (Customer c : client.getC().getRecords()) {
-      custModel.addRow(c.toString().split("\n"));
-    }
-    custTable.setModel(custModel);
   }
   
 }
