@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -21,8 +22,8 @@ public final class ClientController {
   private ObjectOutputStream out;
   private ObjectInputStream in;
   private Socket serverSocket;
-  private ProductStore p;
-  private CustomerStore c;
+  private ArrayList<Product> p;
+  private ArrayList<Customer> c;
 
   public ClientController() {
         
@@ -33,10 +34,10 @@ public final class ClientController {
       this.establishStreams();     
       this.populateStores();
       
-      System.out.println( this.getP().getRecords().size() 
+      System.out.println( this.p.size() 
         + " products received");
       
-      System.out.println( this.getC().getRecords().size() 
+      System.out.println( this.c.size() 
         + " customers received");      
       
     } catch (IOException ex) {
@@ -143,14 +144,14 @@ public final class ClientController {
     
     // Get products
     try {
-      this.p = (ProductStore) this.getObject("VIEW_PROD");   
+      this.p = (ArrayList<Product>) this.getObject("VIEW_PROD");
     }catch(Exception ex){
       System.err.println("Unexpected object type.");
     }
     
     // Get customers
     try {
-      this.c = (CustomerStore) this.getObject("VIEW_CUST"); 
+      this.c = (ArrayList<Customer>) this.getObject("VIEW_CUST"); 
     }catch(Exception ex){
       System.err.println("Unexpected object type.");
     }
@@ -178,22 +179,6 @@ public final class ClientController {
   }
 
   /**
-   * Retrieve the products datastore
-   * @return ProductStore
-   */
-  public ProductStore getP() {
-    return p;
-  }
-
-  /**
-   * Retrieve the customers datastore
-   * @return CustomerStore
-   */
-  public CustomerStore getC() {
-    return c;
-  }
-
-  /**
    * Sends a new Product object back to the server and, assuming it is received,
    * also adds the new object to the local datastore. This method also updates
    * the relevant status JLabel to update the UI with confirmation or error.
@@ -206,20 +191,22 @@ public final class ClientController {
     JLabel prodStatus, 
     JTextField prodName, 
     JTextField prodSKU, 
-    JTextField prodPrice) {
+    JTextField prodPrice,
+    JTextField prodColor) {
     
     // Create object, then write to server
     try{
       Product prod = new Product(
         prodName.getText(),
         prodSKU.getText(),
-        Double.parseDouble(prodPrice.getText())
+        Double.parseDouble(prodPrice.getText()),
+        prodColor.getText()
       );
       this.sendString("ADD_PROD");
       out.writeObject(prod);
       out.flush();
       
-      this.p.getRecords().add(prod);
+      this.p.add(prod);
       
       prodStatus.setText("Product added!");
       prodStatus.setForeground(Color.black);
@@ -246,14 +233,16 @@ public final class ClientController {
    */
   void addCustomer(
     JLabel custStatus, 
-    JTextField custName, 
+    JTextField custFirstName, 
+    JTextField custLastName, 
     JTextField custAddress, 
     JTextField custPhone) {
 
     // Create object, then write to server
     try {
       Customer cust = new Customer(
-        custName.getText(),
+        custFirstName.getText(),
+        custLastName.getText(),
         custAddress.getText(),
         custPhone.getText()
       );
@@ -261,7 +250,7 @@ public final class ClientController {
       out.writeObject(cust);
       out.flush();
 
-      this.c.getRecords().add(cust);
+      this.c.add(cust);
 
       custStatus.setText("Customer added!");
       custStatus.setForeground(Color.black);
@@ -281,14 +270,14 @@ public final class ClientController {
     switch(recordType){
       
       case "cust":
-       for( Customer cust :  this.c.getRecords()){
-         if(cust.getName().toLowerCase().contains(query.toLowerCase())){
+       for( Customer cust :  this.c ){
+         if(cust.getFirstName().toLowerCase().contains(query.toLowerCase())){
            result = cust.toString();
            break;
          }
        }
       case "prod":
-        for( Product prod : this.p.getRecords()){
+        for( Product prod : this.p ){
           if(prod.getProductName().toLowerCase().contains(query.toLowerCase())){
             result = prod.toString();
             break;
@@ -300,4 +289,23 @@ public final class ClientController {
     return result; 
     
   }
+
+  public ArrayList<Product> getP() {
+    return p;
+  }
+
+  public ArrayList<Customer> getC() {
+    return c;
+  }
+  
+  public CustomerTableModel buildCustModel(){
+    CustomerTableModel ctm = new CustomerTableModel(this.c);
+    return ctm;
+  }
+  
+  public ProductTableModel buildProdModel(){
+    ProductTableModel ptm = new ProductTableModel(this.p);
+    return ptm;
+  }
+  
 }
