@@ -12,13 +12,15 @@ public class Customer extends Person implements Serializable {
   
   /**
    * Constructor used for streamlined instantiation of customer objects!
-   * @param name    Customer's name
+   * @param firstName
+   * @param lastName
    * @param phone   Customer's phone
    * @param address Customer's address
    */
 
-  public Customer(String name, String address, String phone ) {
-    this.name = name;
+  public Customer(String firstName, String lastName, String address, String phone ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.phone = phone;
     this.address = address;
   }
@@ -43,7 +45,7 @@ public class Customer extends Person implements Serializable {
     // Use system property rather than \n for better compatibility
     String nl = System.getProperty("line.separator");
     
-    sb.append(this.name).append(nl);
+    sb.append(this.firstName).append(" ").append(this.lastName).append(nl);
     sb.append(this.address).append(nl);
     sb.append(this.phone).append(nl);
     

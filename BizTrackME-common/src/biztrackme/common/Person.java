@@ -8,15 +8,24 @@ import java.io.Serializable;
  */
 public abstract class Person implements Serializable{
 
-  String name;
-  String phone;
+  String  firstName,
+          lastName,
+          phone;
 
-  public String getName() {
-    return name;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setFirstName(String name) {
+    this.firstName = name;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   public String getPhone() {

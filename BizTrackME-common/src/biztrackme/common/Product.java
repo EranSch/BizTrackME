@@ -12,7 +12,8 @@ public class Product implements Serializable {
   public static int numberOfProducts = 0;
   
   String  productName,
-          sku;
+          sku,
+          color;
   double  price;
 
   /**
@@ -21,12 +22,14 @@ public class Product implements Serializable {
    * @param productname
    * @param sku
    * @param price 
+   * @param color 
    */
-  public Product(String productname, String sku, double price) {
+  public Product(String productname, String sku, double price, String color) {
     
     this.productName = productname;
     this.sku = sku;
     this.price = price;
+    this.color = color;
     
     numberOfProducts++;
   }
@@ -53,7 +56,8 @@ public class Product implements Serializable {
     sb.append(this.productName).append(nl);
     sb.append(this.sku).append(nl);
     sb.append(String.valueOf(this.price)).append(nl);
-
+    sb.append(this.color).append(nl);
+    
     return sb.toString();
   }
   
@@ -85,4 +89,13 @@ public class Product implements Serializable {
   public void setPrice(double price) {
     this.price = price;
   }
+
+  public String getColor() {
+    return color;
+  }
+
+  public void setColor(String color) {
+    this.color = color;
+  }
+  
 }
