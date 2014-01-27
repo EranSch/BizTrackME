@@ -9,14 +9,29 @@ import javax.swing.JOptionPane;
  */
 public class ClientUI extends javax.swing.JFrame {
   
-  ClientController client = new ClientController();
-  CustomerTableModel cTableModel = client.buildCustModel();
-  ProductTableModel pTableModel = client.buildProdModel();
+  ClientController client;
+  CustomerTableModel cTableModel;
+  ProductTableModel pTableModel;
 
   /**
    * Creates new form ClientUI
    */
   public ClientUI() {
+    
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+    try {
+      client = new ClientController();
+      cTableModel = client.buildCustModel();
+      pTableModel = client.buildProdModel();
+    } catch (NullPointerException ex) {
+      JOptionPane.showMessageDialog(
+        this,
+        "Fatal error connecting to server. Is it on?", "Error!", 2
+      );
+      System.exit(0);
+    }
+    
     initComponents();
   }
 
@@ -547,7 +562,7 @@ public class ClientUI extends javax.swing.JFrame {
   /**
    * @param args the command line arguments
    */
-  public static void main(String args[]) {
+  public static void main(String args[]) {  
     /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -574,19 +589,9 @@ public class ClientUI extends javax.swing.JFrame {
     /* Create and display the form */
     java.awt.EventQueue.invokeLater(new Runnable() {
       @Override
-      public void run() {
-        ClientUI ui = new ClientUI();
-        
-        try{
-          ui.init();
-          ui.setVisible(true);
-        }catch(NullPointerException ex){
-          JOptionPane.showMessageDialog(
-            ui, 
-            "Fatal error connecting to server. Is it on?", "Error!", 2
-          );
-          System.exit(0);
-        }           
+      public void run() {       
+        ClientUI ui = new ClientUI();      
+        ui.setVisible(true);       
       }
     });
   }
@@ -646,13 +651,4 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JPanel welcomePane;
   // End of variables declaration//GEN-END:variables
 
-  /**
-   * Simple init method which initializes the controller for the UI
-   */
-  public void init(){
-    
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
-  }
-  
 }
