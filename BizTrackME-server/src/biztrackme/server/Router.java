@@ -59,7 +59,8 @@ public class Router implements Runnable {
         out.flush();
         
         // This will store requests as they come
-        String req;
+        String req,
+               ID;
         
         /**
          * This is the routing loop, it should be repeated for the duration of a
@@ -92,6 +93,14 @@ public class Router implements Runnable {
               break;
             case "SEARCH_PROD":
               out.writeObject(db.searchProducts( in.readUTF() ));
+              break;
+            case "UPDATE_PROD":
+              ID = in.readUTF();
+              db.updateProduct(ID, (Product)this.readObject(in));
+              break;
+            case "UPDATE_CUST":
+              ID = in.readUTF();
+              db.updateCustomer(ID, (Customer)this.readObject(in));
               break;
             case "TERMINATE":
               BizTrackMEServer.logEvent("event", "Client initiated kill.");

@@ -33,7 +33,7 @@ public class ClientUI extends javax.swing.JFrame {
       System.exit(0);
     }
     
-    initComponents();
+    initComponents();    
   }
 
   /**
@@ -87,8 +87,8 @@ public class ClientUI extends javax.swing.JFrame {
     fileRefresh = new javax.swing.JMenuItem();
     menuRefresh = new javax.swing.JMenuItem();
     jMenu2 = new javax.swing.JMenu();
-    jMenuItem1 = new javax.swing.JMenuItem();
-    jMenuItem4 = new javax.swing.JMenuItem();
+    updateCust = new javax.swing.JMenuItem();
+    updateProd = new javax.swing.JMenuItem();
     jMenu4 = new javax.swing.JMenu();
     jMenuItem2 = new javax.swing.JMenuItem();
     jMenuItem3 = new javax.swing.JMenuItem();
@@ -403,16 +403,21 @@ public class ClientUI extends javax.swing.JFrame {
 
     jMenu2.setText("Update");
 
-    jMenuItem1.setText("Customer");
-    jMenu2.add(jMenuItem1);
-
-    jMenuItem4.setText("Product");
-    jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+    updateCust.setText("Customer");
+    updateCust.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuItem4ActionPerformed(evt);
+        updateCustActionPerformed(evt);
       }
     });
-    jMenu2.add(jMenuItem4);
+    jMenu2.add(updateCust);
+
+    updateProd.setText("Product");
+    updateProd.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        updateProdActionPerformed(evt);
+      }
+    });
+    jMenu2.add(updateProd);
 
     menuBar.add(jMenu2);
 
@@ -551,9 +556,72 @@ public class ClientUI extends javax.swing.JFrame {
     // TODO add your handling code here:
   }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-  private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_jMenuItem4ActionPerformed
+  private void updateProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProdActionPerformed
+    
+    int ID;
+    String name, sku, color;
+    double price;
+
+    try {
+      ID = Integer.parseInt(
+        JOptionPane.showInputDialog(
+          this,
+          "Enter the ID of the product you'd like to update", ""));
+
+      name = JOptionPane.showInputDialog(this, "Product Name",
+        prodTable.getValueAt((ID - 1), 1));
+
+      sku = JOptionPane.showInputDialog(this, "SKU",
+        prodTable.getValueAt((ID - 1), 2));
+      
+      price = Double.parseDouble(JOptionPane.showInputDialog(this, "Price",
+        prodTable.getValueAt((ID - 1), 3)));
+
+      color = JOptionPane.showInputDialog(this, "Color",
+        prodTable.getValueAt((ID - 1), 4));
+
+      client.updateProduct(ID, name, sku, price, color);
+      
+      refreshProdTable();
+
+    } catch (NumberFormatException ex) {
+      JOptionPane.showMessageDialog(this, "Please enter a number.");
+    }
+    
+  }//GEN-LAST:event_updateProdActionPerformed
+
+  private void updateCustActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCustActionPerformed
+    
+    int ID;
+    String newFirstName, newLastName, newAddress, newPhone;
+    
+    try{
+      ID = Integer.parseInt( 
+      JOptionPane.showInputDialog(
+        this, 
+        "Enter the ID of the customer you'd like to update", ""));
+      
+      newFirstName = JOptionPane.showInputDialog(this, "First Name",
+        custTable.getValueAt((ID-1), 1));
+      
+      newLastName = JOptionPane.showInputDialog(this, "Last Name",
+        custTable.getValueAt((ID-1), 2));
+
+      newAddress = JOptionPane.showInputDialog(this, "Address",
+        custTable.getValueAt((ID-1), 3));
+
+      newPhone = JOptionPane.showInputDialog(this, "Phone",
+        custTable.getValueAt((ID-1), 4));
+      
+      client.updateCustomer(ID, newFirstName, newLastName, newAddress, newPhone) ;
+      
+      refreshCustTable();
+      
+    }catch(NumberFormatException ex){
+      JOptionPane.showMessageDialog(this, "Please enter a number.");
+    }
+   
+  }//GEN-LAST:event_updateCustActionPerformed
 
   private void refreshProdTable(){
     // Update product table
@@ -633,10 +701,8 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JMenu jMenu1;
   private javax.swing.JMenu jMenu2;
   private javax.swing.JMenu jMenu4;
-  private javax.swing.JMenuItem jMenuItem1;
   private javax.swing.JMenuItem jMenuItem2;
   private javax.swing.JMenuItem jMenuItem3;
-  private javax.swing.JMenuItem jMenuItem4;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JTextArea jTextArea1;
   private javax.swing.JMenuItem killServer;
@@ -656,6 +722,8 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JMenuItem searchCust;
   private javax.swing.JMenuItem searchProd;
   private javax.swing.JTabbedPane tabPane;
+  private javax.swing.JMenuItem updateCust;
+  private javax.swing.JMenuItem updateProd;
   private javax.swing.JPanel welcomePane;
   // End of variables declaration//GEN-END:variables
 

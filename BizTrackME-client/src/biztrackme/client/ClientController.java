@@ -7,6 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -131,6 +133,14 @@ public final class ClientController {
       System.err.println("Unexpected object type.");
     }
     return incoming;
+  }
+  
+  private void sendObject(Object obj) {
+    try{
+      out.writeObject(obj);
+    } catch (IOException ex) {
+      System.err.println("IO Error\n"+ex.getMessage());
+    }
   }
   
   /**
@@ -267,5 +277,54 @@ public final class ClientController {
     );
     return ptm;
   }
+
+  void updateProductTable(TableModelEvent tme) {
+    int row = tme.getFirstRow();
+    int column = tme.getColumn();
+    TableModel model = (TableModel) tme.getSource();
+    String columnName = model.getColumnName(column);
+    Object data = model.getValueAt(row, column);
+    
+    System.out.println(data);
+    
+  }
+
+  void updateProductTable(
+    String ID, 
+    String productName, 
+    String sku, 
+    String price, 
+    String color) {
+    
+    this.sendString("UPDATE_PROD");
+    this.sendString(ID);
+    this.sendObject(new Product(productName, sku, Double.parseDouble(price), color));
+   
+  }
+
+  void updateCustomer(
+    int ID, 
+    String newFirstName, 
+    String newLastName, 
+    String newAddress,
+    String newPhone
+  ) {
+    this.sendString("UPDATE_CUST");
+    this.sendString(String.valueOf(ID));
+    this.sendObject(new Customer(newFirstName, newLastName, newAddress, newPhone));
+  }
+
+  void updateProduct(
+    int ID, 
+    String name, 
+    String sku, 
+    double price, 
+    String color
+  ) {
+    this.sendString("UPDATE_PROD");
+    this.sendString(String.valueOf(ID));
+    this.sendObject(new Product(name, sku, price, color));
+  }
+
   
 }

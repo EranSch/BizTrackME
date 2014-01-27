@@ -86,6 +86,30 @@ public class MySQLAccess {
     }
   }
   
+  public void update( String table, String ID, String[] fields, String[] values ){
+    
+    String idField = ( table.equalsIgnoreCase("products") ) ? "product_id" : "customer_id";
+    
+    String query = "UPDATE `" + table + "` SET ";
+    
+    for(int i=0; i < fields.length; i++){
+      query += "`" + fields[i] + "` = '" + values[i] + "'";
+      if(i+1 != fields.length){
+        query += ",";
+      }
+    }
+      
+    query += " WHERE `" + idField + "` = " + ID ;
+
+    BizTrackMEServer.logEvent("event", "Issuing Query [" + query + "]");
+
+    try {
+      c.createStatement().execute(query);
+    } catch (SQLException ex) {
+      BizTrackMEServer.logEvent("error", "Query failed!\n" + ex.getMessage());
+    }
+  }
+  
   /**
    * Inserts a Customer object into the database
    * @param c Customer 
@@ -253,6 +277,34 @@ public class MySQLAccess {
     }
 
     return null;
+  }
+
+  void updateProduct(String ID, Product p) {
+    this.update(
+      "products",
+      ID,
+      new String[]{"product_name", "sku", "price", "color"},
+      new String[]{
+        p.getProductName(),
+        p.getSku(),
+        String.valueOf(p.getPrice()),
+        p.getColor()
+      }
+    );
+  }
+
+  void updateCustomer(String ID, Customer c) {
+    this.update(
+      "customers", 
+      ID, 
+      new String[]{"first_name","last_name","address", "phone"}, 
+      new String[]{
+        c.getFirstName(),
+        c.getLastName(),
+        c.getAddress(),
+        c.getPhone()
+      }
+    );
   }
 
 }
