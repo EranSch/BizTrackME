@@ -90,8 +90,8 @@ public class ClientUI extends javax.swing.JFrame {
     updateCust = new javax.swing.JMenuItem();
     updateProd = new javax.swing.JMenuItem();
     jMenu4 = new javax.swing.JMenu();
-    jMenuItem2 = new javax.swing.JMenuItem();
-    jMenuItem3 = new javax.swing.JMenuItem();
+    deleteCustomer = new javax.swing.JMenuItem();
+    deleteProduct = new javax.swing.JMenuItem();
     jMenu1 = new javax.swing.JMenu();
     searchCust = new javax.swing.JMenuItem();
     searchProd = new javax.swing.JMenuItem();
@@ -423,16 +423,21 @@ public class ClientUI extends javax.swing.JFrame {
 
     jMenu4.setText("Delete");
 
-    jMenuItem2.setText("Customer");
-    jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+    deleteCustomer.setText("Customer");
+    deleteCustomer.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuItem2ActionPerformed(evt);
+        deleteCustomerActionPerformed(evt);
       }
     });
-    jMenu4.add(jMenuItem2);
+    jMenu4.add(deleteCustomer);
 
-    jMenuItem3.setText("Product");
-    jMenu4.add(jMenuItem3);
+    deleteProduct.setText("Product");
+    deleteProduct.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        deleteProductActionPerformed(evt);
+      }
+    });
+    jMenu4.add(deleteProduct);
 
     menuBar.add(jMenu4);
 
@@ -552,9 +557,22 @@ public class ClientUI extends javax.swing.JFrame {
     }
   }//GEN-LAST:event_killServerActionPerformed
 
-  private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_jMenuItem2ActionPerformed
+  private void deleteCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCustomerActionPerformed
+    int ID;
+
+    try {
+      ID = Integer.parseInt(
+        JOptionPane.showInputDialog(
+          this,
+          "Enter the ID of the customer you'd like to delete", ""));
+
+      client.delete("CUST", ID);
+      refreshCustTable();
+
+    } catch (NumberFormatException ex) {
+      JOptionPane.showMessageDialog(this, "Please enter a number.");
+    }
+  }//GEN-LAST:event_deleteCustomerActionPerformed
 
   private void updateProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProdActionPerformed
     
@@ -623,6 +641,23 @@ public class ClientUI extends javax.swing.JFrame {
    
   }//GEN-LAST:event_updateCustActionPerformed
 
+  private void deleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProductActionPerformed
+    int ID;
+    
+    try{
+      ID = Integer.parseInt( 
+      JOptionPane.showInputDialog(
+        this, 
+        "Enter the ID of the product you'd like to delete", ""));
+      
+      client.delete("PROD", ID);
+      refreshProdTable();
+      
+      } catch (NumberFormatException ex) {
+      JOptionPane.showMessageDialog(this, "Please enter a number.");
+    }
+  }//GEN-LAST:event_deleteProductActionPerformed
+
   private void refreshProdTable(){
     // Update product table
     prodTable.setModel(client.buildProdModel());
@@ -688,6 +723,8 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JLabel custStatus;
   private javax.swing.JButton custSubmit;
   private javax.swing.JTable custTable;
+  private javax.swing.JMenuItem deleteCustomer;
+  private javax.swing.JMenuItem deleteProduct;
   private javax.swing.JMenuItem fileRefresh;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel10;
@@ -701,8 +738,6 @@ public class ClientUI extends javax.swing.JFrame {
   private javax.swing.JMenu jMenu1;
   private javax.swing.JMenu jMenu2;
   private javax.swing.JMenu jMenu4;
-  private javax.swing.JMenuItem jMenuItem2;
-  private javax.swing.JMenuItem jMenuItem3;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JTextArea jTextArea1;
   private javax.swing.JMenuItem killServer;

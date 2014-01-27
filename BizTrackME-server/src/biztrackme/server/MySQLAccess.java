@@ -305,4 +305,21 @@ public class MySQLAccess {
     );
   }
 
+  public void remove(String table, String ID) {
+    
+    String idField = ( table.equalsIgnoreCase("products") ) ? "product_id" : "customer_id";
+    
+    String query = "DELETE from `" + table + "` WHERE `" + idField + "` = " + ID;
+    
+    BizTrackMEServer.logEvent("event", "Issuing Query [" + query + "]");
+
+    try {
+      c.createStatement().execute(query);
+    } catch (SQLException ex) {
+      BizTrackMEServer.logEvent("error", "Query failed!\n" + ex.getMessage());
+    }
+    
+    
+  }
+
 }

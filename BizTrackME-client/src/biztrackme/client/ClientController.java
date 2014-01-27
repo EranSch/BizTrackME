@@ -321,5 +321,11 @@ public final class ClientController {
     this.sendObject(new Product(name, sku, price, color));
   }
 
+  void delete(String type, int ID) {
+    String flag = (type.equals("PROD")) ? "PROD" : "CUST";
+    this.sendString("DELETE_" + flag);
+    this.sendString(String.valueOf(ID));
+  }
+
   
 }

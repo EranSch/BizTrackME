@@ -102,6 +102,12 @@ public class Router implements Runnable {
               ID = in.readUTF();
               db.updateCustomer(ID, (Customer)this.readObject(in));
               break;
+            case "DELETE_PROD":
+              db.remove("products",in.readUTF());
+              break;
+            case "DELETE_CUST":
+              db.remove("customers",in.readUTF());
+              break;
             case "TERMINATE":
               BizTrackMEServer.logEvent("event", "Client initiated kill.");
               db.close();
