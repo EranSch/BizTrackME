@@ -17,8 +17,8 @@ public class MySQLAccess {
   private Connection c;
 
   /**
-   * Constructor to establish connection.
-   * @param location
+   * Constructor to establish database connection.
+   * @param location URI location of server, (e.g. 'jdbc:mysql://localhost/it351db')
    * @param user
    * @param password 
    */
@@ -84,12 +84,24 @@ public class MySQLAccess {
     }
   }
   
+  /**
+   * Preformats the generic UPDATE query as well as handles all associated 
+   * errors. Parameters B and C are String[]'s, comprising of the fields and 
+   * values to push into the DB
+   * @param table Either 'products' or 'customers'
+   * @param ID
+   * @param fields
+   * @param values 
+   */
   public void update( String table, String ID, String[] fields, String[] values ){
     
+    // Determine the column name for the PK
     String idField = ( table.equalsIgnoreCase("products") ) ? "product_id" : "customer_id";
     
+    // Start the query
     String query = "UPDATE `" + table + "` SET ";
     
+    // Loop through each field and add to the query
     for(int i=0; i < fields.length; i++){
       query += "`" + fields[i] + "` = '" + values[i] + "'";
       if(i+1 != fields.length){
@@ -97,6 +109,7 @@ public class MySQLAccess {
       }
     }
       
+    // Finish the query
     query += " WHERE `" + idField + "` = " + ID ;
 
     BizTrackMEServer.logEvent("event", "Issuing Query [" + query + "]");
@@ -168,7 +181,6 @@ public class MySQLAccess {
     }
 
     return null;
-    
   }
   
   /**
@@ -196,8 +208,7 @@ public class MySQLAccess {
       BizTrackMEServer.logEvent("error", "Get customers failed.");
     }
         
-    return null;
-    
+    return null; 
   }
 
   /**
@@ -219,13 +230,18 @@ public class MySQLAccess {
     return sb.toString();
   }
 
+  /**
+   * Submits a fuzzy query to the customers table, searching the first and last
+   * name columns for the supplied query
+   * @param query
+   * @return  Multi-line string; 1 line per match
+   */
   String searchCustomers(String query) {
     
     StringBuilder result = new StringBuilder();
     String separator = "  |  ";
     
     try {
-  
       ResultSet rs = this.query(
         "SELECT * FROM customers " + 
           "WHERE `first_name` LIKE '%" + query + "%'" + 
@@ -246,16 +262,21 @@ public class MySQLAccess {
     }
     
     return null;
-    
   }
 
+  /**
+   * Submits a fuzzy query to the products table, searching the product
+   * name column for the supplied query
+   *
+   * @param query
+   * @return Multi-line string; 1 line per match
+   */
   String searchProducts(String query) {
     
     StringBuilder result = new StringBuilder();
     String separator = "  |  ";
 
     try {
-
       ResultSet rs = this.query(
         "SELECT * FROM products "
         + "WHERE `product_name` LIKE '%" + query + "%'");
@@ -277,6 +298,12 @@ public class MySQLAccess {
     return null;
   }
 
+  /**
+   * Updates a single product identified by ID. The given Product object will
+   * replace all fields for the corresponding ID!
+   * @param ID
+   * @param p Product
+   */
   void updateProduct(String ID, Product p) {
     this.update(
       "products",
@@ -291,6 +318,12 @@ public class MySQLAccess {
     );
   }
 
+  /**
+   * Updates a single customer identified by ID. The given Customer object will
+   * replace all fields for the corresponding ID!
+   * @param ID
+   * @param c Customer
+   */
   void updateCustomer(String ID, Customer c) {
     this.update(
       "customers", 
@@ -305,10 +338,17 @@ public class MySQLAccess {
     );
   }
 
+  /**
+   * Removes an entry from the DB. 
+   * @param table
+   * @param ID 
+   */
   public void remove(String table, String ID) {
     
+    // Determine the correct PK field name
     String idField = ( table.equalsIgnoreCase("products") ) ? "product_id" : "customer_id";
     
+    // Build query
     String query = "DELETE from `" + table + "` WHERE `" + idField + "` = " + ID;
     
     BizTrackMEServer.logEvent("event", "Issuing Query [" + query + "]");
@@ -317,9 +357,6 @@ public class MySQLAccess {
       c.createStatement().execute(query);
     } catch (SQLException ex) {
       BizTrackMEServer.logEvent("error", "Query failed!\n" + ex.getMessage());
-    }
-    
-    
+    } 
   }
-
 }

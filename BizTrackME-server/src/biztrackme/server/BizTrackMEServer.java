@@ -24,8 +24,8 @@ public class BizTrackMEServer {
   
 
   /**
-   * Initializes the server. This includes establishing datastores, opening
-   * a server socket, and listening for any requests.
+   * Initializes the server. This includes establishing database connection, 
+   * opening a server socket, and listening for requests.
    */
   private void init() {
     
@@ -35,18 +35,22 @@ public class BizTrackMEServer {
     // Open the socket
     Server s = new Server(LISTEN_PORT);
     
+    // Listen for connections, spin up a new thread for each one
     while(true){
       
-      // Listen for connections
       Socket socket = null;
       try {
         socket = s.server.accept();
       } catch (IOException ex) {
-        BizTrackMEServer.logEvent("error", "Failed to establish connection\n" + ex.getMessage());
+        BizTrackMEServer.logEvent(
+          "error", 
+          "Failed to establish connection\n" + ex.getMessage());
       }
 
+      // Instantiate new thread
       Thread client = new Thread(new Router(socket, db));
 
+      // Off it goes!
       client.start();
     }
     

@@ -9,8 +9,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -27,13 +25,10 @@ public final class ClientController {
 
   public ClientController() {
         
-    try {
-      
+    try {    
       // Initialize the connection and populate data stores
       this.connect(SERVER_HOSTNAME,SERVER_PORT);
       this.establishStreams();     
-    
-      
     } catch (IOException ex) {
       System.out.print("Error connecting to server!");
     }
@@ -48,7 +43,6 @@ public final class ClientController {
         closeConnections();
       }
     });
-
   }
   
   /**
@@ -78,7 +72,6 @@ public final class ClientController {
     in = new ObjectInputStream(
       serverSocket.getInputStream()
     );
-    
   }
   
   /**
@@ -130,6 +123,10 @@ public final class ClientController {
     return incoming;
   }
   
+  /**
+   * Sends an object to the host.
+   * @param obj Object to send
+   */
   private void sendObject(Object obj) {
     try{
       out.writeObject(obj);
@@ -139,7 +136,7 @@ public final class ClientController {
   }
   
   /**
-   * Attempts to disassemble all stream and and socket.
+   * Attempts to disassemble all streams and socket.
    */
   public void closeConnections(){
     this.sendString("CLIENT_DISCONNECT");
@@ -237,9 +234,15 @@ public final class ClientController {
       custStatus.setText("Error connecting to server :(");
       custStatus.setForeground(Color.red);
     }
-  
   }
 
+  /**
+   * Pass either 'cust' or 'prod' as the first parameter, followed by
+   * the query to search by. 
+   * @param recordType Enter 'cust' or 'prod'
+   * @param query 
+   * @return 
+   */
   public String search(String recordType, String query) {
     
     String result = "No record found";
@@ -255,10 +258,14 @@ public final class ClientController {
         break;
     }
     
-    return result; 
-    
+    return result;   
   }
   
+  /**
+   * Retrieves current customer information from  the server for direct
+   * assignment to a JTable. 
+   * @return CustomerTableModel
+   */
   public CustomerTableModel buildCustModel(){
     CustomerTableModel ctm = new CustomerTableModel(
       (ArrayList<Customer>) this.getObject("VIEW_CUST")
@@ -266,6 +273,11 @@ public final class ClientController {
     return ctm;
   }
   
+  /**
+   * Retrieves current product information from  the server for direct
+   * assignment to a JTable. 
+   * @return ProductTableModel
+   */
   public ProductTableModel buildProdModel(){
     ProductTableModel ptm = new ProductTableModel(
       (ArrayList<Product>) this.getObject("VIEW_PROD")
@@ -273,30 +285,14 @@ public final class ClientController {
     return ptm;
   }
 
-  void updateProductTable(TableModelEvent tme) {
-    int row = tme.getFirstRow();
-    int column = tme.getColumn();
-    TableModel model = (TableModel) tme.getSource();
-    String columnName = model.getColumnName(column);
-    Object data = model.getValueAt(row, column);
-    
-    System.out.println(data);
-    
-  }
-
-  void updateProductTable(
-    String ID, 
-    String productName, 
-    String sku, 
-    String price, 
-    String color) {
-    
-    this.sendString("UPDATE_PROD");
-    this.sendString(ID);
-    this.sendObject(new Product(productName, sku, Double.parseDouble(price), color));
-   
-  }
-
+  /**
+   * Updates a single remote customer entry identified by the PK ID from the DB
+   * @param ID
+   * @param newFirstName
+   * @param newLastName
+   * @param newAddress
+   * @param newPhone 
+   */
   void updateCustomer(
     int ID, 
     String newFirstName, 
@@ -309,6 +305,14 @@ public final class ClientController {
     this.sendObject(new Customer(newFirstName, newLastName, newAddress, newPhone));
   }
 
+  /**
+   * Updates a single remote product entry identified by the PK ID from the DB
+   * @param ID
+   * @param name
+   * @param sku
+   * @param price
+   * @param color 
+   */
   void updateProduct(
     int ID, 
     String name, 
@@ -321,11 +325,15 @@ public final class ClientController {
     this.sendObject(new Product(name, sku, price, color));
   }
 
+  /**
+   * Requests that a record be deleted from the DB. The table should be identified
+   * as either 'PROD' or 'CUST', the ID is simply the PK ID from the DB
+   * @param type Use either 'PROD' or 'CUST'
+   * @param ID 
+   */
   void delete(String type, int ID) {
     String flag = (type.equals("PROD")) ? "PROD" : "CUST";
     this.sendString("DELETE_" + flag);
     this.sendString(String.valueOf(ID));
   }
-
-  
 }

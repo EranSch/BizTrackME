@@ -50,7 +50,6 @@ public class Product implements Serializable {
     
     numberOfProducts++;
   }
-  
 
   /**
    * Override the no args constructor as well to ensure the class variable

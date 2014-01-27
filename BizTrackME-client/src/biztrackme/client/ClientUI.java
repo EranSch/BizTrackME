@@ -21,10 +21,10 @@ public class ClientUI extends javax.swing.JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
     try {
+      // Get the inital table data before the JTables are drawn
       client = new ClientController();
       cTableModel = client.buildCustModel();
-      pTableModel = client.buildProdModel();
-            
+      pTableModel = client.buildProdModel();           
     } catch (NullPointerException ex) {
       JOptionPane.showMessageDialog(
         null,

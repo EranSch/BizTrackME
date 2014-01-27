@@ -41,7 +41,6 @@ public class Customer extends Person implements Serializable {
     this.address = address;
   }
 
-
   public String getAddress() {
     return address;
   }
