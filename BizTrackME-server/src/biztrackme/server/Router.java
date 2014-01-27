@@ -87,6 +87,12 @@ public class Router implements Runnable {
               db.addCustomer((Customer) this.readObject(in));
               BizTrackMEServer.logEvent("event", "Product received");
               break;
+            case "SEARCH_CUST":
+              out.writeObject(db.searchCustomers( in.readUTF() ));
+              break;
+            case "SEARCH_PROD":
+              out.writeObject(db.searchProducts( in.readUTF() ));
+              break;
             case "TERMINATE":
               BizTrackMEServer.logEvent("event", "Client initiated kill.");
               db.close();

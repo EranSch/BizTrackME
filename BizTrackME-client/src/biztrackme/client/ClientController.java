@@ -8,7 +8,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -234,7 +239,16 @@ public final class ClientController {
     
     String result = "No record found";
     
-    // Add new logic for this later
+    switch(recordType){
+      case "cust":
+        this.sendString("SEARCH_CUST");
+        result = (String)this.getObject(query);
+        break;
+      case "prod":
+        this.sendString("SEARCH_PROD");
+        result = (String)this.getObject(query);
+        break;
+    }
     
     return result; 
     

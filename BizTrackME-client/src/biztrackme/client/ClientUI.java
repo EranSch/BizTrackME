@@ -24,9 +24,10 @@ public class ClientUI extends javax.swing.JFrame {
       client = new ClientController();
       cTableModel = client.buildCustModel();
       pTableModel = client.buildProdModel();
+            
     } catch (NullPointerException ex) {
       JOptionPane.showMessageDialog(
-        this,
+        null,
         "Fatal error connecting to server. Is it on?", "Error!", 2
       );
       System.exit(0);
@@ -480,23 +481,18 @@ public class ClientUI extends javax.swing.JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void fileRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileRefreshActionPerformed
-    
-    // Update product table
-    prodTable.setModel(client.buildProdModel());
-    pTableModel.fireTableDataChanged();
-    
-    // Update customer table
-    custTable.setModel(client.buildCustModel());
-    pTableModel.fireTableDataChanged();
-    
+    refreshCustTable();
+    refreshProdTable(); 
   }//GEN-LAST:event_fileRefreshActionPerformed
 
   private void prodSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prodSubmitActionPerformed
     client.addProduct( prodStatus, prodName, prodSKU, prodPrice, prodColor );
+    refreshProdTable();
   }//GEN-LAST:event_prodSubmitActionPerformed
 
   private void custSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custSubmitActionPerformed
     client.addCustomer(custStatus, custFirstName, custLastName, custAddress, custPhone);
+    refreshCustTable();
   }//GEN-LAST:event_custSubmitActionPerformed
 
   private void menuRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRefreshActionPerformed
@@ -559,6 +555,18 @@ public class ClientUI extends javax.swing.JFrame {
     // TODO add your handling code here:
   }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+  private void refreshProdTable(){
+    // Update product table
+    prodTable.setModel(client.buildProdModel());
+    pTableModel.fireTableDataChanged();
+  }
+  
+  private void refreshCustTable(){
+    // Update customer table
+    custTable.setModel(client.buildCustModel());
+    pTableModel.fireTableDataChanged();
+  }
+  
   /**
    * @param args the command line arguments
    */

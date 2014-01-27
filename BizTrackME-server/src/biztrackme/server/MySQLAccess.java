@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -194,6 +196,63 @@ public class MySQLAccess {
     }
     return sb.toString();
   }
+
+  String searchCustomers(String query) {
+    
+    StringBuilder result = new StringBuilder();
+    String separator = "  |  ";
+    
+    try {
   
-  
+      ResultSet rs = this.query(
+        "SELECT * FROM customers " + 
+          "WHERE `first_name` LIKE '%" + query + "%'" + 
+          "OR `last_name` LIKE '%" + query + "%'");
+      
+      while (rs.next() == true) {
+        result.append(rs.getString("customer_id")).append(separator);
+        result.append(rs.getString("first_name")).append(" ");
+        result.append(rs.getString("last_name")).append(separator);
+        result.append(rs.getString("address")).append(separator);
+        result.append(rs.getString("phone")).append("\n");
+      }
+      
+      return result.toString();
+      
+    } catch (SQLException ex) {
+      BizTrackMEServer.logEvent("error", "Query Error!");
+    }
+    
+    return null;
+    
+  }
+
+  String searchProducts(String query) {
+    
+    StringBuilder result = new StringBuilder();
+    String separator = "  |  ";
+
+    try {
+
+      ResultSet rs = this.query(
+        "SELECT * FROM products "
+        + "WHERE `product_name` LIKE '%" + query + "%'");
+
+      while (rs.next() == true) {
+        result.append(rs.getString("product_id")).append(separator);
+        result.append(rs.getString("product_name")).append(separator);
+        result.append(rs.getString("sku")).append(separator);
+        result.append(rs.getString("price")).append(separator);
+        result.append(rs.getString("color")).append("\n");
+      }
+
+      return result.toString();
+
+    } catch (SQLException ex) {
+      BizTrackMEServer.logEvent("error", "Query Error!");
+    }
+
+    return null;
+  }
+
 }
