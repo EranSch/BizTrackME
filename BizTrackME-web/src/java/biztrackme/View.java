@@ -71,9 +71,12 @@ public class View extends HttpServlet {
       prodTable.append("</table></div>");
       
       request.setAttribute("custTable", custTable.toString());
-      request.setAttribute("prodTable", prodTable);
+      request.setAttribute("prodTable", prodTable);     
       
       getServletConfig().getServletContext().getRequestDispatcher("/views/view.jsp").forward(request, response);
+      
+      db.close();
+      
     } catch (IOException | ServletException ex) {
       System.err.println(ex.getStackTrace());
     }
