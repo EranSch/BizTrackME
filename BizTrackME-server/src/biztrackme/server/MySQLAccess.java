@@ -359,4 +359,53 @@ public class MySQLAccess {
       BizTrackMEServer.logEvent("error", "Query failed!\n" + ex.getMessage());
     } 
   }
+  
+  /**
+   * Get a single customer by ID
+   * @param ID
+   * @return 
+   */
+  public Customer getCustomer(int ID){    
+    Customer cust = null;    
+    try {      
+      ResultSet rs = this.query("SELECT * FROM customers WHERE customer_id = " + ID);
+      while (rs.next() == true) {
+        cust = new Customer(
+          rs.getInt("customer_id"),
+          rs.getString("first_name"),
+          rs.getString("last_name"),
+          rs.getString("address"),
+          rs.getString("phone")
+        );
+      }      
+    } catch (SQLException ex) {
+      BizTrackMEServer.logEvent("error", "Get customer failed.");
+    }
+    return cust;
+  }
+  
+  /**
+   * Get a single product by ID
+   * @param ID
+   * @return 
+   */
+  public Product getProduct(int ID){    
+    Product prod = null;    
+    try {      
+      ResultSet rs = this.query("SELECT * FROM products WHERE product_id = " + ID);
+      while (rs.next() == true) {
+        prod = new Product(
+          rs.getInt("product_id"),
+          rs.getString("product_name"),
+          rs.getString("sku"),
+          rs.getDouble("price"),
+          rs.getString("color")
+        );
+      }      
+    } catch (SQLException ex) {
+      BizTrackMEServer.logEvent("error", "Get product failed.");
+    }
+    return prod;
+  }
+  
 }

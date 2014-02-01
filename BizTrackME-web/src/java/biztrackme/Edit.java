@@ -6,6 +6,9 @@ package biztrackme;
  * and open the template in the editor.
  */
 
+import biztrackme.common.Customer;
+import biztrackme.common.Product;
+import biztrackme.server.MySQLAccess;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -32,24 +35,49 @@ public class Edit extends HttpServlet {
     throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     
-    String pathInfo = request.getPathInfo(); // /{value}/test
-    String[] pathParts = pathInfo.split("/");
-    String part1 = pathParts[1]; // {value}
-    String part2 = pathParts[2]; // test
+    String fullPath = request.getPathInfo();
+    String[] pathParts = fullPath.split("/");
+    String type = pathParts[1];
+    String id = pathParts[2];
     
-    try (PrintWriter out = response.getWriter()) {
-      /* TODO output your page here. You may use following sample code. */
-      out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      out.println("<head>");
-      out.println("<title>Servlet Edit</title>");      
-      out.println("</head>");
-      out.println("<body>");
-      out.println("<h1>Param 1: " + part1 + "</h1>");
-      out.println("<h1>Param 2: " + part2 + "</h1>");
-      out.println("</body>");
-      out.println("</html>");
+    // Connect the Database
+    String DB_URL = "jdbc:mysql://localhost/it351db";
+    MySQLAccess db = new MySQLAccess(DB_URL, "ctuonline", "student");
+    
+    // This will eventually point to a specific JSP
+    String viewPath = "/views/edit";
+    
+    int editId = Integer.valueOf(id);
+    
+    switch(type){
+      case "customer":        
+        Customer c = db.getCustomer(editId);
+        if( c != null ){
+          viewPath += "Customer.jsp";
+          request.setAttribute("firstName", c.getFirstName());
+          request.setAttribute("lastName", c.getLastName());
+          request.setAttribute("address", c.getAddress());
+          request.setAttribute("phone", c.getPhone());
+        }else{
+          viewPath += "Error.jsp";
+        }
+        break;
+      case "product":
+        Product p = db.getProduct(editId);
+        if( p != null ){
+          viewPath += "Product.jsp";
+          request.setAttribute("productName", p.getProductName());
+          request.setAttribute("sku", p.getSku());
+          request.setAttribute("price", p.getPrice());
+          request.setAttribute("color", p.getColor());
+        }
+        break;
+      default :
+        break;
     }
+    
+    getServletConfig().getServletContext().getRequestDispatcher(viewPath).forward(request, response);
+    db.close();
     
   }
 

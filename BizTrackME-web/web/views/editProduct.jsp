@@ -7,13 +7,13 @@
         </nav>
             
         <div class="container">
-            <h1>Edit Customer</h1>
+            <h1>Edit Product</h1>
             
             <ul>
-                <li>First Name: <%= request.getAttribute("firstName") %></li>
-                <li>Last Name: <%= request.getAttribute("lastName") %></li>
-                <li>Address: <%= request.getAttribute("address") %></li>
-                <li>Phone: <%= request.getAttribute("phone") %></li>
+                <li>Product Name: <%= request.getAttribute("productName") %></li>
+                <li>SKU: <%= request.getAttribute("sku") %></li>
+                <li>Price: <%= request.getAttribute("price") %></li>
+                <li>Color: <%= request.getAttribute("color") %></li>
             </ul>
         </div>
             
