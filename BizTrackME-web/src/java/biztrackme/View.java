@@ -1,6 +1,10 @@
 package biztrackme;
 
+import biztrackme.common.Customer;
+import biztrackme.common.Product;
+import biztrackme.server.MySQLAccess;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,17 +30,47 @@ public class View extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     try {
       
-      String custTable = "<div class=\"panel  panel-info\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\">+</a><h2>Customers</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Customer</div><table class=\"table\">";
-      custTable += "<tr><th>First Name</th><th>Last Name</th><th>Address</th><th>Phone</th></tr>";
-      custTable += "<tr><td>Eran</td><td>Schoellhorn</td><td>15907 NW 188th St</td><td>(970) 325-3726</td></tr>";
-      custTable += "</table></div>";
+      // Connect the Database
+      String DB_URL = "jdbc:mysql://localhost/it351db";
+      MySQLAccess db = new MySQLAccess(DB_URL, "ctuonline", "student");
       
-      String prodTable = "<div class=\"panel  panel-info\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\">+</a><h2>Products</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Customer</div><table class=\"table\">";
-      prodTable += "<tr><th>First Name</th><th>Last Name</th><th>Address</th><th>Phone</th></tr>";
-      prodTable += "<tr><td>Eran</td><td>Schoellhorn</td><td>15907 NW 188th St</td><td>(970) 325-3726</td></tr>";
-      prodTable += "</table></div>";
+      // Build the customer table
+      ArrayList<Customer> c = db.getCustomers();      
+      StringBuilder custTable = new StringBuilder();
       
-      request.setAttribute("custTable", custTable);
+      custTable.append("<div class=\"panel  panel-info\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\">+</a><h2>Customers</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Customer</div><table class=\"table\">");
+      custTable.append("<tr><th>First Name</th><th>Last Name</th><th>Address</th><th>Phone</th><th>Edit</th><th>Delete</th></tr>");      
+      for( Customer cust : c ){
+        custTable.append("<tr>");
+        custTable.append("<td>").append(cust.getFirstName()).append("</td>");
+        custTable.append("<td>").append(cust.getLastName()).append("</td>");
+        custTable.append("<td>").append(cust.getAddress()).append("</td>");
+        custTable.append("<td>").append(cust.getPhone()).append("</td>");
+        custTable.append("<td>").append("<a class=\"btn btn-primary\" href=\"edit/customer/").append(cust.getID()).append("\">Edit</a>").append("</td>");
+        custTable.append("<td>").append("<a class=\"btn btn-danger\" href=\"delete/product/").append(cust.getID()).append("\">Delete</a>").append("</td>");
+        custTable.append("</tr>");
+      }      
+      custTable.append("</table></div>");
+      
+      // Build the product table
+      ArrayList<Product> p = db.getProducts();
+      StringBuilder prodTable = new StringBuilder();
+      
+      prodTable.append("<div class=\"panel  panel-info\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\">+</a><h2>Products</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Product</div><table class=\"table\">");
+      prodTable.append("<tr><th>Product Name</th><th>SKU</th><th>Price</th><th>Color</th><th>Edit</th><th>Delete</th></tr>");
+      for( Product prod : p ){
+        prodTable.append("<tr>");
+        prodTable.append("<td>").append(prod.getProductName()).append("</td>");
+        prodTable.append("<td>").append(prod.getSku()).append("</td>");
+        prodTable.append("<td>").append(prod.getPrice()).append("</td>");
+        prodTable.append("<td>").append(prod.getColor()).append("</td>");
+        prodTable.append("<td>").append("<a class=\"btn btn-primary\" href=\"edit/product/").append(prod.getID()).append("\">Edit</a>").append("</td>");        
+        prodTable.append("<td>").append("<a class=\"btn btn-danger\" href=\"delete/product/").append(prod.getID()).append("\">Delete</a>").append("</td>");        
+        prodTable.append("</tr>");
+      }
+      prodTable.append("</table></div>");
+      
+      request.setAttribute("custTable", custTable.toString());
       request.setAttribute("prodTable", prodTable);
       
       getServletConfig().getServletContext().getRequestDispatcher("/view.jsp").forward(request, response);
