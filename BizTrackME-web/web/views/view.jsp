@@ -13,5 +13,9 @@
             
             <script src="//code.jquery.com/jquery.min.js"></script>
             <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+            <script src="/vendor/jquery.filtertable.min.js"></script>
+            <script type="text/javascript">
+                $('table').filterTable();
+            </script>            
     </body>
 </html>
