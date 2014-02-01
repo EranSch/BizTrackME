@@ -1,14 +1,13 @@
         <jsp:include page="includes/header.html" />
-        <title>BizTrackME</title>
+        <title>Edit Customer</title>
     </head>
     <body>
         <nav class="navbar navbar-default" role="navigation">
-            <h1 class="navbar-text"><img src="images/BizTrackME_Logo.png" alt="BizTrackME"></h1>
+            <h1 class="navbar-text"><img src="/images/BizTrackME_Logo.png" alt="BizTrackME"></h1>
         </nav>
             
-        <div class="row">
-            <div class="col-md-6"><%= request.getAttribute("custTable") %></div>
-            <div class="col-md-6"><%= request.getAttribute("prodTable") %></div>
+        <div class="container">
+            <h1>Edit Customer</h1>
         </div>
             
             <script src="//code.jquery.com/jquery.min.js"></script>
