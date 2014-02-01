@@ -10,7 +10,7 @@
     </head>
     <body>
         <nav class="navbar navbar-default" role="navigation">
-            <h1 class="navbar-text">BizTrackME</h1>
+            <h1 class="navbar-text"><img src="images/BizTrackME_Logo.png" alt="BizTrackME"></h1>
         </nav>
             
         <div class="row">
