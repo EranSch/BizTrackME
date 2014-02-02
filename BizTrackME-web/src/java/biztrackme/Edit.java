@@ -41,8 +41,11 @@ public class Edit extends HttpServlet {
     String id = pathParts[2];
     
     // Connect the Database
-    String DB_URL = "jdbc:mysql://localhost/it351db";
-    MySQLAccess db = new MySQLAccess(DB_URL, "ctuonline", "student");
+    MySQLAccess db = new MySQLAccess(
+      Config.DB_LOCATION,
+      Config.DB_USER,
+      Config.DB_PASS
+    );
     
     // This will eventually point to a specific JSP
     String viewPath = "/views/edit";
