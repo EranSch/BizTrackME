@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class MySQLAccess {
   
-  private final String driver = "org.gjt.mm.mysql.Driver";
+  private final String driver = "com.mysql.jdbc.Driver";
   private Connection c;
 
   /**
@@ -27,10 +27,10 @@ public class MySQLAccess {
       Class.forName(driver);
       c = DriverManager.getConnection(location, user, password);
       BizTrackMEServer.logEvent("event", "Database connected! [" + location + "]");
-    }catch( ClassNotFoundException ex ){
-      BizTrackMEServer.logEvent("error", "Database driver error!");
+    }catch( ClassNotFoundException ex ){      
+      BizTrackMEServer.logEvent("error", "Database driver error!\n" + ex.getMessage());
     }catch(SQLException ex){
-      BizTrackMEServer.logEvent("error", "Database connection error!");
+      BizTrackMEServer.logEvent("error", "Database connection error!\n" + ex.getMessage());
     }    
   }
   
