@@ -1,16 +1,9 @@
 package biztrackme;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import biztrackme.common.Customer;
 import biztrackme.common.Product;
 import biztrackme.server.MySQLAccess;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +60,7 @@ public class Edit extends HttpServlet {
               }
             );
           response.sendRedirect("/view");
+          db.close();
           return;
         }else{
             Customer c = db.getCustomer(editId);
@@ -96,6 +90,7 @@ public class Edit extends HttpServlet {
             }
           );
           response.sendRedirect("/view");
+          db.close();
           return;
         }else{
           Product p = db.getProduct(editId);
