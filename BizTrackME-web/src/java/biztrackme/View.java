@@ -41,7 +41,7 @@ public class View extends HttpServlet {
       ArrayList<Customer> c = db.getCustomers();      
       StringBuilder custTable = new StringBuilder();
       
-      custTable.append("<div class=\"panel panel-default\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\" href=\"/add/customer\">+</a><h2>Customers</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Customer</div><table class=\"table\">");
+      custTable.append("<div class=\"panel panel-default\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\" href=\"/BizTrackME/add/customer\">+</a><h2>Customers</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Customer</div><table class=\"table\">");
       custTable.append("<thead><tr><th>First Name</th><th>Last Name</th><th>Address</th><th>Phone</th><th>Edit</th><th>Delete</th></tr></thead>");      
       for( Customer cust : c ){
         custTable.append("<tr>");
@@ -59,7 +59,7 @@ public class View extends HttpServlet {
       ArrayList<Product> p = db.getProducts();
       StringBuilder prodTable = new StringBuilder();
       
-      prodTable.append("<div class=\"panel panel-default\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\" href=\"/add/product\">+</a><h2>Products</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Product</div><table class=\"table\">");
+      prodTable.append("<div class=\"panel panel-default\"><div class=\"panel-heading\"><a class=\"btn btn-success pull-right\" href=\"/BizTrackME/add/product\">+</a><h2>Products</h2></div><div class=\"panel-body\">Click the plus sign to right to add a new Product</div><table class=\"table\">");
       prodTable.append("<thead><tr><th>Product Name</th><th>SKU</th><th>Price</th><th>Color</th><th>Edit</th><th>Delete</th></tr></thead>");
       for( Product prod : p ){
         prodTable.append("<tr>");

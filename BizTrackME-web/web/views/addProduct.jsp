@@ -3,7 +3,7 @@
     </head>
     <body>
         <nav class="navbar navbar-default" role="navigation">
-            <a href="/view"><h1 class="navbar-text"><img src="/images/BizTrackME_Logo.png" alt="BizTrackME"></h1></a>
+            <a href="/BizTrackME/view"><h1 class="navbar-text"><img src="/BizTrackME/images/BizTrackME_Logo.png" alt="BizTrackME"></h1></a>
         </nav>
             
         <div class="container">         

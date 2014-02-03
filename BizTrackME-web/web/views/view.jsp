@@ -3,7 +3,7 @@
     </head>
     <body>
         <nav class="navbar navbar-default" role="navigation">
-            <h1 class="navbar-text"><img src="images/BizTrackME_Logo.png" alt="BizTrackME"></h1>
+            <h1 class="navbar-text"><img src="/BizTrackME/images/BizTrackME_Logo.png" alt="BizTrackME"></h1>
         </nav>
             
         <div class="row">
@@ -13,7 +13,7 @@
             
             <script src="//code.jquery.com/jquery.min.js"></script>
             <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-            <script src="/vendor/jquery.filtertable.min.js"></script>
+            <script src="/BizTrackME/vendor/jquery.filtertable.min.js"></script>
             <script type="text/javascript">
                 $('table').filterTable();
             </script>            

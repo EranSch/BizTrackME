@@ -55,7 +55,7 @@ public class Delete extends HttpServlet {
         break;
     }
    
-    response.sendRedirect("/view");
+    response.sendRedirect("/BizTrackME/view");
     db.close();
     
   }

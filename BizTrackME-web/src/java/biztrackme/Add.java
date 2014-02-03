@@ -51,7 +51,7 @@ public class Add extends HttpServlet {
             request.getParameter("address"),
             request.getParameter("phone")
           ));
-          response.sendRedirect("/view");
+          response.sendRedirect("/BizTrackME/view");
           db.close();
           return;
         }else{
@@ -66,7 +66,7 @@ public class Add extends HttpServlet {
             Double.valueOf(request.getParameter("price")),
             request.getParameter("color")
           ));
-          response.sendRedirect("/view");
+          response.sendRedirect("/BizTrackME/view");
           db.close();
           return;
         }else{
@@ -74,7 +74,7 @@ public class Add extends HttpServlet {
         }    
         break;
       default:
-        response.sendRedirect("/view");
+        response.sendRedirect("/BizTrackME/view");
         return;
     }
     

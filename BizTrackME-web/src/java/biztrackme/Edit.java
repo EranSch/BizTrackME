@@ -59,7 +59,7 @@ public class Edit extends HttpServlet {
                 request.getParameter("editPhone")
               }
             );
-          response.sendRedirect("/view");
+          response.sendRedirect("/BizTrackME/view");
           db.close();
           return;
         }else{
@@ -89,7 +89,7 @@ public class Edit extends HttpServlet {
               request.getParameter("editColor")
             }
           );
-          response.sendRedirect("/view");
+          response.sendRedirect("/BizTrackME/view");
           db.close();
           return;
         }else{
@@ -105,7 +105,7 @@ public class Edit extends HttpServlet {
           break;
         }
       default :
-        response.sendRedirect("/view");
+        response.sendRedirect("/BizTrackME/view");
         return;
     }
     

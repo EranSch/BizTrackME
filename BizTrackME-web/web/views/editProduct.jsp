@@ -4,7 +4,7 @@
     <body>
         <nav class="navbar navbar-default" role="navigation">
             <h1 class="navbar-text">
-                <a href="/view"><img src="/images/BizTrackME_Logo.png" alt="BizTrackME"></a>
+                <a href="/BizTrackME/view"><img src="/BizTrackME/images/BizTrackME_Logo.png" alt="BizTrackME"></a>
             </h1>
         </nav>
             
