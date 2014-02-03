@@ -1,4 +1,4 @@
-package biztrackme.common;
+package biztrackme;
 
 import java.io.Serializable;
 

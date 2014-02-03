@@ -1,6 +1,5 @@
-package biztrackme.server;
+package biztrackme;
 
-import biztrackme.common.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

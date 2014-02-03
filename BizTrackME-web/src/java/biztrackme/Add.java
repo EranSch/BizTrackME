@@ -1,8 +1,5 @@
 package biztrackme;
 
-import biztrackme.common.Customer;
-import biztrackme.common.Product;
-import biztrackme.server.MySQLAccess;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
