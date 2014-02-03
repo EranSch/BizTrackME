@@ -50,7 +50,7 @@ public class View extends HttpServlet {
         custTable.append("<td>").append(cust.getAddress()).append("</td>");
         custTable.append("<td>").append(cust.getPhone()).append("</td>");
         custTable.append("<td>").append("<a class=\"btn btn-primary\" href=\"edit/customer/").append(cust.getID()).append("\">Edit</a>").append("</td>");
-        custTable.append("<td>").append("<a class=\"btn btn-danger\" href=\"delete/product/").append(cust.getID()).append("\">Delete</a>").append("</td>");
+        custTable.append("<td>").append("<a class=\"btn btn-danger\" href=\"delete/customer/").append(cust.getID()).append("\">Delete</a>").append("</td>");
         custTable.append("</tr>");
       }      
       custTable.append("</table></div>");
