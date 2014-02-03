@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Eran
  */
-public class Edit extends HttpServlet {
+public class Add extends HttpServlet {
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,8 +31,7 @@ public class Edit extends HttpServlet {
     String fullPath = request.getPathInfo();
     String[] pathParts = fullPath.split("/");
     String type = pathParts[1];
-    String id = pathParts[2];
-    
+
     // Connect the Database
     MySQLAccess db = new MySQLAccess(
       Config.DB_LOCATION,
@@ -41,75 +40,45 @@ public class Edit extends HttpServlet {
     );
     
     // This will eventually point to a specific JSP
-    String viewPath = "/views/edit";
-    
-    int editId = Integer.valueOf(id);
-    
+    String addPath = "/views/add";
+     
     switch(type){
       case "customer":
         if("post".equalsIgnoreCase(request.getMethod())){
-          db.update(
-              "customers", 
-              request.getParameter("id"),
-              new String[]{"first_name", "last_name", "address", "phone"},
-              new String[]{
-                request.getParameter("editFirstName"),
-                request.getParameter("editLastName"),
-                request.getParameter("editAddress"),
-                request.getParameter("editPhone")
-              }
-            );
+          db.addCustomer(new Customer(
+            request.getParameter("firstName"),
+            request.getParameter("lastName"),
+            request.getParameter("address"),
+            request.getParameter("phone")
+          ));
           response.sendRedirect("/view");
           db.close();
           return;
         }else{
-            Customer c = db.getCustomer(editId);
-            if( c != null ){
-              viewPath += "Customer.jsp";
-              request.setAttribute("id", c.getID());
-              request.setAttribute("firstName", c.getFirstName());
-              request.setAttribute("lastName", c.getLastName());
-              request.setAttribute("address", c.getAddress());
-              request.setAttribute("phone", c.getPhone());
-            }else{
-              viewPath += "Error.jsp";
-            }
+          addPath += "Customer.jsp";
         }
         break;
       case "product":
-        if ("post".equalsIgnoreCase(request.getMethod())) {
-          db.update(
-            "products",
-            request.getParameter("id"),
-            new String[]{"product_name", "sku", "price", "color"},
-            new String[]{
-              request.getParameter("editProductName"),
-              request.getParameter("editSku"),
-              request.getParameter("editPrice"),
-              request.getParameter("editColor")
-            }
-          );
+        if("post".equalsIgnoreCase(request.getMethod())){
+          db.addProduct(new Product(
+            request.getParameter("productName"),
+            request.getParameter("sku"),
+            Double.valueOf(request.getParameter("price")),
+            request.getParameter("color")
+          ));
           response.sendRedirect("/view");
           db.close();
           return;
         }else{
-          Product p = db.getProduct(editId);
-          if (p != null) {
-            viewPath += "Product.jsp";
-            request.setAttribute("id", p.getID());
-            request.setAttribute("productName", p.getProductName());
-            request.setAttribute("sku", p.getSku());
-            request.setAttribute("price", p.getPrice());
-            request.setAttribute("color", p.getColor());
-          }
-          break;
-        }
-      default :
+          addPath += "Product.jsp";
+        }    
+        break;
+      default:
         response.sendRedirect("/view");
         return;
     }
     
-    getServletConfig().getServletContext().getRequestDispatcher(viewPath).forward(request, response);
+    getServletConfig().getServletContext().getRequestDispatcher(addPath).forward(request, response);
     db.close();
     
   }

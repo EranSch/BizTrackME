@@ -20,6 +20,10 @@
         <servlet-name>Delete</servlet-name>
         <servlet-class>biztrackme.Delete</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Add</servlet-name>
+        <servlet-class>biztrackme.Add</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
         <url-pattern>/view</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>Delete</servlet-name>
         <url-pattern>/delete/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Add</servlet-name>
+        <url-pattern>/add/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
