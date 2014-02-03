@@ -53,28 +53,62 @@ public class Edit extends HttpServlet {
     int editId = Integer.valueOf(id);
     
     switch(type){
-      case "customer":        
-        Customer c = db.getCustomer(editId);
-        if( c != null ){
-          viewPath += "Customer.jsp";
-          request.setAttribute("firstName", c.getFirstName());
-          request.setAttribute("lastName", c.getLastName());
-          request.setAttribute("address", c.getAddress());
-          request.setAttribute("phone", c.getPhone());
+      case "customer":
+        if("post".equalsIgnoreCase(request.getMethod())){
+          db.update(
+              "customers", 
+              request.getParameter("id"),
+              new String[]{"first_name", "last_name", "address", "phone"},
+              new String[]{
+                request.getParameter("editFirstName"),
+                request.getParameter("editLastName"),
+                request.getParameter("editAddress"),
+                request.getParameter("editPhone")
+              }
+            );
+          response.sendRedirect("/view");
+          return;
         }else{
-          viewPath += "Error.jsp";
+            Customer c = db.getCustomer(editId);
+            if( c != null ){
+              viewPath += "Customer.jsp";
+              request.setAttribute("id", c.getID());
+              request.setAttribute("firstName", c.getFirstName());
+              request.setAttribute("lastName", c.getLastName());
+              request.setAttribute("address", c.getAddress());
+              request.setAttribute("phone", c.getPhone());
+            }else{
+              viewPath += "Error.jsp";
+            }
         }
         break;
       case "product":
-        Product p = db.getProduct(editId);
-        if( p != null ){
-          viewPath += "Product.jsp";
-          request.setAttribute("productName", p.getProductName());
-          request.setAttribute("sku", p.getSku());
-          request.setAttribute("price", p.getPrice());
-          request.setAttribute("color", p.getColor());
+        if ("post".equalsIgnoreCase(request.getMethod())) {
+          db.update(
+            "products",
+            request.getParameter("id"),
+            new String[]{"product_name", "sku", "price", "color"},
+            new String[]{
+              request.getParameter("editProductName"),
+              request.getParameter("editSku"),
+              request.getParameter("editPrice"),
+              request.getParameter("editColor")
+            }
+          );
+          response.sendRedirect("/view");
+          return;
+        }else{
+          Product p = db.getProduct(editId);
+          if (p != null) {
+            viewPath += "Product.jsp";
+            request.setAttribute("id", p.getID());
+            request.setAttribute("productName", p.getProductName());
+            request.setAttribute("sku", p.getSku());
+            request.setAttribute("price", p.getPrice());
+            request.setAttribute("color", p.getColor());
+          }
+          break;
         }
-        break;
       default :
         break;
     }
