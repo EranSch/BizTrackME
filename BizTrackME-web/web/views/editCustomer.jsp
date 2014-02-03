@@ -16,7 +16,7 @@
                         <input class="form-control" type="text" name="editAddress" value="<%= request.getAttribute("address") %>" required>
                         <input class="form-control" type="text" name="editPhone" value="<%= request.getAttribute("phone") %>" required>
                         <input type="hidden" name="id" value="<%= request.getAttribute("id") %>">
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Save User</button>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Save Customer</button>
                     </form>
                 </div>
             </div>           
