@@ -4,3 +4,7 @@ body{
 .filter-table {
     padding-left: 15px;
 }
+.centered{
+    margin: 0 auto;
+    display: table-cell;
+}
