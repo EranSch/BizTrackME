@@ -6,5 +6,5 @@ body{
 }
 .centered{
     margin: 0 auto;
-    display: table-cell;
+    display: block;
 }

@@ -24,6 +24,10 @@
         <servlet-name>Add</servlet-name>
         <servlet-class>biztrackme.Add</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Order</servlet-name>
+        <servlet-class>biztrackme.Order</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
         <url-pattern>/view</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>Add</servlet-name>
         <url-pattern>/add/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Order</servlet-name>
+        <url-pattern>/order</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
