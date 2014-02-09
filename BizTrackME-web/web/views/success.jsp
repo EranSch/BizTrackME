@@ -5,7 +5,7 @@
         <div class="container">
             <nav class="navbar navbar-default col-md-6 col-md-offset-3" role="navigation">
                 <h1 class="navbar-text">
-                    <img src="/BizTrackME/images/BizTrackME_Logo.png" alt="BizTrackME" class="centered">
+                    <a href="/BizTrackME/order"><img src="/BizTrackME/images/BizTrackME_Logo.png" alt="BizTrackME" class="centered"></a>
                 </h1>
             </nav>
 
